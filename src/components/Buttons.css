@@ -1,0 +1,39 @@
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 30px 0;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+    transition: background-color 0.3s ease;
+  }
+  
+  .register {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+  }
+  
+  .register:hover {
+    background-color: #007bff;
+    border: 2px solid #007bff;
+  }
+  
+  .login {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+  }
+  
+  .login:hover {
+    background-color: #007bff;
+    border: 2px solid #007bff;
+  }
+  
