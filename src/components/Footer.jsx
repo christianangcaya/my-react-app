@@ -1,16 +1,20 @@
 import React from "react";
 import "./Footer.css";
+import footerimage from "../assets/lgu-logo.png"
+import fbimage from "../assets/fb.png"
+import emailimage from "../assets/email.png"
+import phoneimage from "../assets/telephonee.png"
 
 const Footer = () => {
   return (
     <footer className="footer">
       <p>Contact Us:</p>
       <ul>
-        <li><span></span>Lgu-Daet Expanded Scholarship Program</li>
-        <li>Email: lgudaetsprogram@gmail.com</li>
-        <li>Phone: 524-565-8653</li>
+        <li> <span><img src={fbimage}></img></span>Lgu-Daet Expanded Scholarship Program</li>
+        <li> <span><img src={emailimage}></img></span>Email: lgudaetsprogram@gmail.com</li>
+        <li> <span><img src={phoneimage}></img></span>Phone: 524-565-8653</li>
       </ul>
-      <img src="footer-logo.png" alt="Footer Logo" />
+      <img src={footerimage} alt="Footer Logo" />
       <p>All Rights Reserved.</p>
     </footer>
   );

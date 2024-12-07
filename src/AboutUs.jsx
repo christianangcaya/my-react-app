@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutUs.css";
+import imageau from "./assets/aboutusimage.jpg"
 
 const AboutUs = () => {
   return (
@@ -11,7 +12,7 @@ const AboutUs = () => {
 
       <div className="content">
         <img
-          src="/path-to-your-image.jpg" 
+          src={imageau} 
           alt="Scholarship Group"
           className="about-image"
         />

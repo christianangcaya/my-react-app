@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import lguImage from "../assets/lgu-logo.png"
 
 const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <img src="logo.png" alt="Logo" className="logo-img" />
+        <img src={lguImage} alt="Logo" className="logo-img" />
         <div>
           <h1>E-Scholarship Application System</h1>
           <p>LOCAL GOVERNMENT UNIT - DAET</p>
