@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
@@ -7,16 +6,25 @@ import Eligibility from "./components/Eligibility";
 import Notice from "./components/Notice";
 import Documents from "./components/Documents";
 import Buttons from "./components/Button";
-import AboutUs from "./AboutUs"; // Assuming AboutUs is in the `pages` folder
+import AboutUs from "./AboutUs"; 
 import "./App.css";
 
 const Home = () => {
   return (
     <main>
       <Eligibility />
-      <Notice />
-      <Documents />
-      <Buttons />
+      <div className="left-right">
+
+        <div className="left">
+        <Notice />
+        </div>
+
+        <div className="right">
+        <Documents />
+        <Buttons />
+        </div>
+
+      </div>
     </main>
   );
 };
@@ -29,8 +37,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/faqs" element={<div>FAQs Page Coming Soon</div>} />
-          <Route path="/user" element={<div>User Profile Page Coming Soon</div>} />
+          <Route path="/faqs" element={<div>FAQs You ka wala pa ini</div>} />
+          <Route path="/user" element={<div>User Profile mayo paaaa</div>} />
         </Routes>
         <Footer />
       </Router>
