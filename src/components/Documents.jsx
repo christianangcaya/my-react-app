@@ -1,18 +1,48 @@
-// components/Documents.jsx
-import React from "react";
+import React, { useState } from "react";
 import "./Documents.css";
+import StepbyStep from "./StepbyStep";
+import RegisterPopup from "./RegisterPopup";
+
+
 
 const Documents = () => {
+
+  const [isSbySVisible, setSbySVisible] = useState(false);
+  const [isDocuVisible, setDocuVisible] = useState(false);
+
+  const handleSbySClick = () => {
+    setSbySVisible(true);
+  };
+
+
+  const handleCloseSbyS = () => {
+    setSbySVisible(false);
+  };
+
+  const handleDocuClick = () => {
+    setDocuVisible(true);
+  };
+
+
+  const handleCloseDocu = () => {
+    setDocuVisible(false);
+  };
+
   return (
     <section className="documents">
+
       <div className="documents-header">
         <h2>Documents to Prepare Prior to Filing Scholarship Application</h2>
-        <a href="#prepare-documents" className="link">Click here</a>
+        <a className="link" onClick={handleDocuClick}>Click here</a>
       </div>
+
       <div className="documents-header">
         <h2>Steps in Filling Out E-Scholarship Application</h2>
-        <a href="#steps" className="link">Click here</a>
+        <a className="link" onClick={handleSbySClick}>Click here</a>
       </div>
+
+      <StepbyStep isOpen={isSbySVisible} onClose={handleCloseSbyS} />
+      
     </section>
   );
 };
