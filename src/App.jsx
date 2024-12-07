@@ -6,7 +6,7 @@ import Eligibility from "./components/Eligibility";
 import Notice from "./components/Notice";
 import Documents from "./components/Documents";
 import Buttons from "./components/Button";
-import AboutUs from "./AboutUs"; 
+import AboutUs from "./AboutUs"; // Assuming AboutUs is in the `pages` folder
 import "./App.css";
 
 const Home = () => {
@@ -37,8 +37,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/faqs" element={<div>FAQs You ka wala pa ini</div>} />
-          <Route path="/user" element={<div>User Profile mayo paaaa</div>} />
+          <Route path="/faqs" element={<div>FAQs Page Coming Soon</div>} />
+          <Route path="/user" element={<div>User Profile Page Coming Soon</div>} />
         </Routes>
         <Footer />
       </Router>
