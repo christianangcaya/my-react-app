@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-// FAQ data array
 const faqs = [
   {
     question: "What is the LGU Daet Scholarship Program?",

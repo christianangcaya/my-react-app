@@ -6,7 +6,8 @@ import Eligibility from "./components/Eligibility";
 import Notice from "./components/Notice";
 import Documents from "./components/Documents";
 import Buttons from "./components/Button";
-import AboutUs from "./AboutUs"; // Assuming AboutUs is in the `pages` folder
+import AboutUs from "./AboutUs"; 
+import FAQsPage from "./FAQsPage";
 import "./App.css";
 
 const Home = () => {
@@ -37,7 +38,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/faqs" element={<div>FAQs Page Coming Soon</div>} />
+          <Route path="/faqs" element={<FAQsPage/>} />
           <Route path="/user" element={<div>User Profile Page Coming Soon</div>} />
         </Routes>
         <Footer />
