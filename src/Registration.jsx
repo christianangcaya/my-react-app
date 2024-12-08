@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./Registration.css";
 import DefaultImage from "./assets/pfp_placeholder.png";
+import PreviewIcon from "./assets/itr_preview.png";
 
 // Reusable input component
 const InputField = ({ id, label, name, type = "text", value, onChange }) => (
@@ -72,18 +73,53 @@ const Registration = () => {
     gwa: "",
     school_name: "",
     school_type: "",
+    father_status: "",
+    father_name: "",
+    father_address: "",
+    father_occupation: "",
+    mother_status: "",
+    mother_name: "",
+    mother_address: "",
+    mother_occupation: "",
+    gross_income: "",
+    children_in_family: "",
+    brother: "",
+    sister: "",
+    itrUrl: PreviewIcon,
+    partners_name: "",
+    no_of_children: "",
+    partners_occupation: "",
+    degree_program_course: "",
+    non_degree_program_course: "",
+    eSignature: PreviewIcon,
   });
-
+  const [awards, setAwards] = useState([
+    { description: "", school: "", date: "" },
+  ]);
   const fileUploadRef = useRef();
+  const itrUploadRef = useRef();
 
+  // Profile Upload Handler
   const handleImageUpload = () => fileUploadRef.current.click();
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prevData) => ({ ...prevData, avatarURL: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // ITR Upload Handler
+  const handleITRUpload = () => itrUploadRef.current.click();
+  const handleITRFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({ ...prevData, itrUrl: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -109,6 +145,20 @@ const Registration = () => {
     }
   };
 
+  const handleAwardChange = (index, field, value) => {
+    const updatedAwards = [...awards];
+    updatedAwards[index][field] = value;
+    setAwards(updatedAwards);
+  };
+
+  const addAwardRow = () => {
+    setAwards([...awards, { description: "", school: "", date: "" }]);
+  };
+
+  const removeAwardRow = (index) => {
+    setAwards(awards.filter((_, i) => i !== index));
+  };
+
   return (
     <>
       <div className="application-header">
@@ -121,7 +171,7 @@ const Registration = () => {
       <div className="form-container">
         <div className="left-right">
           {/* Grant Applied For */}
-          <div className="left">
+          <div className="old_left">
             <div className="instructions">
               <h3>Instructions</h3>
               <p>1. Make sure to enter your information accurately.</p>
@@ -154,7 +204,7 @@ const Registration = () => {
             </div>
           </div>
           {/* Profile Photo */}
-          <div className="right">
+          <div className="old_right">
             <img
               src={formData.avatarURL}
               alt="Avatar"
@@ -415,7 +465,7 @@ const Registration = () => {
             <div className="info1-group">
               <label>School Type:</label>
               <RadioOption
-                id="school_type"
+                id="school_prublic"
                 name="school_type"
                 value="Public"
                 label="Public"
@@ -424,7 +474,7 @@ const Registration = () => {
               />
 
               <RadioOption
-                id="school_type"
+                id="school_private"
                 name="school_type"
                 value="Private"
                 label="Private"
@@ -434,8 +484,269 @@ const Registration = () => {
             </div>
           </div>
 
+          {/* Acadademic Award / Honors Received */}
           <h1>Academic Awards/ Honors Received</h1>
-          <div></div>
+          <div>
+            <table
+              className="awards-table"
+              border="1"
+              style={{ width: "100%" }}
+            >
+              <thead>
+                <tr>
+                  <th>Nature/Description</th>
+                  <th>School</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {awards.map((award, index) => (
+                  <tr key={index}>
+                    <td>
+                      <input
+                        type="text"
+                        value={award.description}
+                        onChange={(e) =>
+                          handleAwardChange(
+                            index,
+                            "description",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter description"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={award.school}
+                        onChange={(e) =>
+                          handleAwardChange(index, "school", e.target.value)
+                        }
+                        placeholder="Enter school name"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={award.date}
+                        onChange={(e) =>
+                          handleAwardChange(index, "date", e.target.value)
+                        }
+                      />
+                    </td>
+                    <td>
+                      <button onClick={() => removeAwardRow(index)}>
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button onClick={addAwardRow} style={{ marginTop: "10px" }}>
+              Add Row
+            </button>
+          </div>
+
+          {/* Family Background */}
+          <h1>Family Background</h1>
+          <div className="left-right">
+            <div className="new_left">
+              <div className="info1-group">
+                <label>Father:</label>
+                <RadioOption
+                  id="father_living"
+                  name="father_status"
+                  value="living"
+                  label="Living"
+                  checked={formData.father_status === "Living"}
+                  onChange={handleChange}
+                />
+                <RadioOption
+                  id="father_deceased"
+                  name="father_status"
+                  value="deceased"
+                  label="deceased"
+                  checked={formData.father_status === "deceased"}
+                  onChange={handleChange}
+                />
+              </div>
+              <InputField
+                id="father_name"
+                label="Name"
+                name="father_name"
+                value={formData.father_name}
+                onChange={handleChange}
+              />
+              <InputField
+                id="father_address"
+                label="Address"
+                name="father_address"
+                value={formData.father_address}
+                onChange={handleChange}
+              />
+              <InputField
+                id="father_occupation"
+                label="Occupation"
+                name="father_occupation"
+                value={formData.father_occupation}
+                onChange={handleChange}
+              />
+            </div>
+            <hr className="vertical-line" />
+            <div className="new_right">
+              <div className="info1-group">
+                <label>Mother:</label>
+                <RadioOption
+                  id="mother_living"
+                  name="mother_status"
+                  value="living"
+                  label="Living"
+                  checked={formData.mother_status === "Living"}
+                  onChange={handleChange}
+                />
+                <RadioOption
+                  id="mother_deceased"
+                  name="mother_status"
+                  value="deceased"
+                  label="deceased"
+                  checked={formData.mother_status === "deceased"}
+                  onChange={handleChange}
+                />
+              </div>
+              <InputField
+                id="mother_name"
+                label="Name"
+                name="mother_name"
+                value={formData.mother_name}
+                onChange={handleChange}
+              />
+              <InputField
+                id="mother_address"
+                label="Address"
+                name="mother_address"
+                value={formData.mother_address}
+                onChange={handleChange}
+              />
+              <InputField
+                id="mother_occupation"
+                label="Occupation"
+                name="mother_occupation"
+                value={formData.mother_occupation}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* Family Income */}
+          <div className="left-right">
+            <div className="old_left">
+              <div className="personal-info">
+                <InputField
+                  id="gross_income"
+                  label="Total of Bpth Parents Gross Income"
+                  name="gross_income"
+                  type="number"
+                  value={formData.gross_income}
+                  onChange={handleChange}
+                />
+                <InputField
+                  id="children_in_family"
+                  label="Number of Children in Family"
+                  name="children_in_family"
+                  type="number"
+                  value={formData.children_in_family}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="personal-info">
+                <InputField
+                  id="brother"
+                  label="No. of Brothers."
+                  name="brother"
+                  type="number"
+                  value={formData.brother}
+                  onChange={handleChange}
+                />
+                <InputField
+                  id="sister"
+                  label="No. of Sisters."
+                  name="sister"
+                  type="number"
+                  value={formData.sister}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="old_right">
+              <img
+                src={formData.itrUrl}
+                alt="ITR Preview"
+                className="itr-image"
+              />
+              <button
+                type="button"
+                onClick={handleITRUpload}
+                className="upload-button"
+              >
+                Upload Income Tax Return (ITR)
+              </button>
+              <input
+                type="file"
+                ref={itrUploadRef}
+                onChange={handleITRFileChange}
+                accept="application/pdf, image/*"
+                style={{ display: "none" }}
+              />
+            </div>
+          </div>
+
+          {/* MARRIED OR LIVING TOGETHER */}
+          <h1>(FOR MARRIED OR LIVING TOGETHER APPLICANT ONLY)</h1>
+          <div className="personal-info">
+            <InputField
+              id="partners_name"
+              label="Name of Husband/Wife"
+              name="partners_name"
+              value={formData.partners_name}
+              onChange={handleChange}
+            />
+            <InputField
+              id="no_of_children"
+              label="Number of Children"
+              name="no_of_children"
+              type="number"
+              value={formData.no_of_children}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="personal-info">
+            <div className="info1-group">
+              <InputField
+                id="parnters_occupation"
+                label="Partner's Occupation"
+                name="parnters_occupation"
+                value={formData.partners_occupation}
+                onChange={handleChange}
+              />
+              <InputField
+                id="partners_name"
+                label="Name of Husband/Wife"
+                name="partners_name"
+                value={formData.partners_name}
+                onChange={handleChange}
+              />
+              <InputField
+                id="partners_name"
+                label="Name of Husband/Wife"
+                name="partners_name"
+                value={formData.partners_name}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>

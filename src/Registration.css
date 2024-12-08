@@ -37,23 +37,26 @@
 .left-right {
   display: flex;
   justify-content: space-between;
+  margin: 20px 0;
 }
 
-.left,
-.right {
+.old_left,
+.old_right {
   padding: 10px;
-  margin: 0 10px;
-}
-
-.left {
-  flex: 3;
-}
-
-.right {
   flex: 1;
+}
+
+.old_left {
+  flex: 3; /* Left section takes more space */
+}
+
+.old_right {
+  flex: 1; /* Right section takes less space */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center align the content horizontally */
+  justify-content: flex-start; /* Align items to the top */
+  gap: 15px; /* Add spacing between stacked items */
 }
 
 .radio-options {
@@ -99,6 +102,12 @@
   object-fit: cover; /* Ensure images cover the area without distortion */
 }
 
+.itr-image {
+  width: 50px; /* Set fixed width */
+  height: 50px;
+  object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
 .personal-info {
   display: flex;
   justify-content: space-between;
@@ -125,4 +134,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.new_left,
+.new_right {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+}
+
+.vertical-line {
+  width: 1px;
+  height: auto;
+  background-color: #000;
+  border: none;
+  margin: 0 20px;
 }
