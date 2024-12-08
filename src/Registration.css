@@ -1,0 +1,28 @@
+.application-header {
+  text-align: center;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-bottom: 2px solid #000;
+  margin-bottom: 20px;
+}
+
+.application-header h2 {
+  font-family: "Georgia", serif;
+  font-size: 24px;
+  margin: 10px 0;
+  color: #333;
+}
+
+.application-header p {
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  margin: 0;
+  color: #555;
+}
+
+.application-header hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 15px auto;
+  width: 60%;
+}
