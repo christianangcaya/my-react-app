@@ -94,7 +94,6 @@
     align-items: center;
     z-index: 9999;
   }
-  
   .popup {
     background: white;
     padding: 20px;
@@ -127,13 +126,10 @@
     cursor: pointer;
   }
   
-  .close-button {
-    background-color: #f44336;
-    color: white;
-  }
+ 
   
   .close-button:hover {
-    background-color: #d32f2f;
+    background-color: #3783e0;
   }
   
   .upload-button {

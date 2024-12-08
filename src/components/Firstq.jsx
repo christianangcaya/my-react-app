@@ -101,7 +101,7 @@ const Firstq = ({ onClose }) => {
               </button>
               <button
                 type="button"
-                className="next-button"
+                className="close-button"
                 onClick={handleNext}
               >
                 Next

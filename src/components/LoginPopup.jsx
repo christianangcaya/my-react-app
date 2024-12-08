@@ -31,7 +31,7 @@ const LoginPopup = ({ onClose }) => {
             <button type="button" className="close-button" onClick={onClose}>
               Close
             </button>
-            <Link type="submit" className="submit-button" to="/finalreq">
+            <Link type="submit" className="close-button" to="/finalreq">
               Log In
             </Link>
           </div>

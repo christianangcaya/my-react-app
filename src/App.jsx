@@ -15,7 +15,7 @@ import FinalReqPage from "./FinalReqPage";
 const Home = () => {
   return (
     
-    <main>
+    <>
       <Header/>
       <Eligibility />
       <div className="left-right">
@@ -27,28 +27,27 @@ const Home = () => {
           <Buttons />
         </div>
       </div>
-    </main>
+    </>
   );
 };
 
 const About = () => {
   return(
-    <main>
+    <>
       <Header />
       <AboutUs />
-    </main>
+    </>
   );
 };
 
 const Faqs = () => {
   return(
-    <main>
+    <>
       <Header />
       <FAQsPage />
-    </main>
+    </>
   );
 };
-
 
 const App = () => {
   return (
