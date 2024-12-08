@@ -153,7 +153,7 @@ const Registration = () => {
     return (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <span className="close-button" onClick={onClose}>
+          <span className="close-preview" onClick={onClose}>
             &times;
           </span>
           <img src={imageSrc} alt="Preview" className="full-size-image" />
