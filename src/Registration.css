@@ -26,3 +26,103 @@
   margin: 15px auto;
   width: 60%;
 }
+
+.form-container {
+  border-radius: 30px;
+  background-color: #f6f6f6;
+  margin: 20px;
+  padding: 5px 10px;
+}
+
+.left-right {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left,
+.right {
+  padding: 10px;
+  margin: 0 10px;
+}
+
+.left {
+  flex: 3;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.radio-options {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.radio-option input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.radio-option label {
+  font-size: 14px;
+  color: #333;
+}
+
+.upload-button {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 10px; /* Add some space above the button */
+}
+
+.upload-button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.avatar-image {
+  width: 150px; /* Set fixed width */
+  height: 150px;
+  object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
+.personal-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.name-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  text-align: center;
+}
+
+.name-group input {
+  width: 100%; /* Ensures the input spans its parent container */
+  padding: 0.5rem; /* Adds padding inside the input for better UX */
+  font-size: 1rem; /* Ensures readable text size */
+  box-sizing: border-box; /* Includes padding in width calculations */
+}
+
+.info1-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
