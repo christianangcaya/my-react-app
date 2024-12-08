@@ -85,17 +85,19 @@ const Registration = () => {
     children_in_family: "",
     brother: "",
     sister: "",
-    itrUrl: "",
+    itrUrl: PreviewIcon,
     partners_name: "",
     no_of_children: "",
     partners_occupation: "",
     degree_program_course: "",
     non_degree_program_course: "",
-    eSignature: "",
+    eSignature: PreviewIcon,
   });
   const [awards, setAwards] = useState([
     { description: "", school: "", date: "" },
   ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const fileUploadRef = useRef();
   const itrUploadRef = useRef();
   const eSignatureUploadRef = useRef();
@@ -138,11 +140,26 @@ const Registration = () => {
       reader.onloadend = () => {
         setFormData((prevData) => ({
           ...prevData,
-          eSignatureUrl: reader.result, // Store the uploaded file URL
+          eSignature: reader.result, // Store the uploaded file URL
         }));
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const Modal = ({ isOpen, onClose, imageSrc }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <span className="close-button" onClick={onClose}>
+            &times;
+          </span>
+          <img src={imageSrc} alt="Preview" className="full-size-image" />
+        </div>
+      </div>
+    );
   };
 
   const handleChange = (event) => {
@@ -229,6 +246,10 @@ const Registration = () => {
               src={formData.avatarURL}
               alt="Avatar"
               className="avatar-image"
+              onClick={() => {
+                setSelectedImage(formData.avatarURL);
+                setIsModalOpen(true);
+              }}
             />
             <button
               type="button"
@@ -248,7 +269,7 @@ const Registration = () => {
         </div>
 
         <div>
-          <h1>Personal Information</h1>
+          <h3>Personal Information</h3>
           {/* Name Information */}
           <div className="personal-info">
             <p>Name:</p>
@@ -505,7 +526,7 @@ const Registration = () => {
           </div>
 
           {/* Acadademic Award / Honors Received */}
-          <h1>Academic Awards/ Honors Received</h1>
+          <h3>Academic Awards/ Honors Received</h3>
           <div>
             <table
               className="awards-table"
@@ -571,7 +592,7 @@ const Registration = () => {
           </div>
 
           {/* Family Background */}
-          <h1>Family Background</h1>
+          <h3>Family Background</h3>
           <div className="left-right">
             <div className="new_left">
               <div className="info1-group">
@@ -701,7 +722,15 @@ const Registration = () => {
               </div>
             </div>
             <div className="old_right">
-              <img src={PreviewIcon} alt="ITR Preview" className="itr-image" />
+              <img
+                src={formData.itrUrl}
+                alt="ITR Preview"
+                className="itr-image"
+                onClick={() => {
+                  setSelectedImage(formData.itrUrl);
+                  setIsModalOpen(true);
+                }}
+              />
               <p>
                 {formData.itrUrl
                   ? "File Uploaded."
@@ -725,7 +754,7 @@ const Registration = () => {
           </div>
 
           {/* MARRIED OR LIVING TOGETHER */}
-          <h1>(FOR MARRIED OR LIVING TOGETHER APPLICANT ONLY)</h1>
+          <h3>(FOR MARRIED OR LIVING TOGETHER APPLICANT ONLY)</h3>
           <div className="personal-info">
             <InputField
               id="partners_name"
@@ -769,13 +798,18 @@ const Registration = () => {
           <div className="left-right">
             <div className="old_left"></div>
             <div className="old_right">
+              // E-Signature Preview
               <img
-                src={PreviewIcon}
+                src={formData.eSignature}
                 alt="E-Signature Preview"
                 className="itr-image"
+                onClick={() => {
+                  setSelectedImage(formData.eSignature);
+                  setIsModalOpen(true);
+                }}
               />
               <p>
-                {formData.eSignatureUrl
+                {formData.eSignature
                   ? "File Uploaded."
                   : "Nothing's been uploaded yet."}
               </p>
@@ -797,6 +831,17 @@ const Registration = () => {
           </div>
         </div>
       </div>
+      <>
+        {/* Other components and JSX */}
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          imageSrc={selectedImage}
+        />
+
+        {/* Other components and JSX */}
+      </>
     </>
   );
 };
