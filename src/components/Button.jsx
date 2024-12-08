@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LoginPopup from "./LoginPopup"; 
-import RegisterPopup from "./RegisterPopup";
+import Firstq from "./firstq";
 import "./Buttons.css";
 
 const Buttons = () => {
@@ -29,8 +29,7 @@ const Buttons = () => {
   return (
     <div className="buttons">
 
-      <button className="button register" onClick={handleRegisterClick}>Apply for Scholarship? REGISTER</button>
-
+      <button className="button register" onClick={handleRegisterClick}>Check your ELIGIBILITY</button>
 
       <button className="button login" onClick={handleLoginClick}>
         Already a Scholar? LOG - IN
@@ -38,7 +37,7 @@ const Buttons = () => {
 
       {isLoginVisible && <LoginPopup onClose={handleCloseLogin} />}
 
-      {isRegisterVisible && <RegisterPopup onClose={handleCloseRegister} />}
+      {isRegisterVisible && <Firstq onClose={handleCloseRegister}/>}
 
 
     </div>
