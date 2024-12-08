@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./RegisterPopup.css";
 
 const RegisterPopup = ({ onClose }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     surname: "",
     firstName: "",
@@ -40,7 +41,6 @@ const RegisterPopup = ({ onClose }) => {
     }
   };
   
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,7 +48,7 @@ const RegisterPopup = ({ onClose }) => {
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(surname) || !namePattern.test(firstName) || !namePattern.test(middleName)) {
       setError("Name fields should contain only alphabets and spaces.");
-      Navigate("/registration"); //pag navigate
+      navigate("/registration"); //pag navigate
       return;
     }
     console.log("Form Data being sent:", formData);
