@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./RegisterPopup.css";
 
 const RegisterPopup = ({ onClose }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     surname: "",
     firstName: "",
@@ -15,25 +14,41 @@ const RegisterPopup = ({ onClose }) => {
 
   const [error, setError] = useState("");
 
-  // Handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
+  
+    if (["surname", "firstName", "middleName"].includes(id)) {
+      const namePattern = /^[A-Za-z\sñÑ]*$/;
+      if (!namePattern.test(value)) {
+        return;
+      }
+      
+      const formattedValue = value
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+  
+      setFormData((prevData) => ({
+        ...prevData,
+        [id]: formattedValue,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [id]: value,
+      }));
+    }
   };
-
-  // Handle form submission
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate inputs
     const { surname, firstName, middleName } = formData;
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(surname) || !namePattern.test(firstName) || !namePattern.test(middleName)) {
       setError("Name fields should contain only alphabets and spaces.");
-      navigate("/registration"); //pag navigate
+      Navigate("/registration"); //pag navigate
       return;
     }
     console.log("Form Data being sent:", formData);
@@ -50,7 +65,7 @@ const RegisterPopup = ({ onClose }) => {
 
       if (response.ok) {
         alert(`Registration successful. Application ID: ${data.application_id}`);
-        
+        onClose();  // Close the popup after successful registration
       } else {
         setError(data.error || "An error occurred. Please try again.");
       }

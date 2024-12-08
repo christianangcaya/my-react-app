@@ -2,7 +2,7 @@ import re
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import mysql.connector
-from datetime import datetime
+from datetime import datetime, date
 
 app = Flask(__name__)
 
@@ -14,10 +14,6 @@ db_config = {
     'password': '',            # Default password is blank
 }
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
 # Ensure the database and tables exist
 def initialize_database():
     try:
@@ -28,14 +24,15 @@ def initialize_database():
         cursor.execute("USE scholarship_db")  # Switch to the database
 
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS registration (
+            CREATE TABLE IF NOT EXISTS Applicants (
                 application_id VARCHAR(10) PRIMARY KEY,
                 surname VARCHAR(100),
                 first_name VARCHAR(100),
                 middle_name VARCHAR(100),
                 suffix_name VARCHAR(50),
                 birthdate DATE,
-                email_address VARCHAR(150) UNIQUE
+                email_address VARCHAR(150) UNIQUE,
+                status VARCHAR(50) DEFAULT 'applicant'
             )
         """)
 
@@ -58,7 +55,7 @@ def generate_application_id():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT application_id FROM registration WHERE application_id LIKE %s ORDER BY application_id DESC LIMIT 1
+            SELECT application_id FROM Applicants WHERE application_id LIKE %s ORDER BY application_id DESC LIMIT 1
         """, (f"{current_year}%",))
         result = cursor.fetchone()
 
@@ -95,6 +92,7 @@ def register_user():
         birthdate_str = data.get('birthday')  # Birthdate is a string in 'YYYY-MM-DD' format
         email_address = data.get('email')
 
+        # Validate names
         if not validate_name(surname):
             return jsonify({"error": "Surname must contain only alphabets"}), 400
         if not validate_name(first_name):
@@ -102,10 +100,16 @@ def register_user():
         if not validate_name(middle_name):
             return jsonify({"error": "Middle name must contain only alphabets"}), 400
 
+        # Validate birthdate format and age
         birthdate = None
         if birthdate_str:
             try:
                 birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d').date()
+                today = date.today()
+                age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+                
+                if age < 18:
+                    return jsonify({"error": "Applicants must be at least 18 years old"}), 400
             except ValueError:
                 return jsonify({"error": "Invalid birthdate format. Expected format: YYYY-MM-DD"}), 400
 
@@ -117,10 +121,10 @@ def register_user():
         cursor = conn.cursor()
 
         query = """
-            INSERT INTO registration (application_id, surname, first_name, middle_name, suffix_name, birthdate, email_address)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO Applicants (application_id, surname, first_name, middle_name, suffix_name, birthdate, email_address, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (application_id, surname, first_name, middle_name, suffix_name, birthdate, email_address))
+        cursor.execute(query, (application_id, surname, first_name, middle_name, suffix_name, birthdate, email_address, "applicant"))
         conn.commit()
 
         cursor.close()
@@ -139,7 +143,7 @@ def get_registrations():
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
 
-        cursor.execute("SELECT * FROM registration")
+        cursor.execute("SELECT * FROM Applicants")
         registrations = cursor.fetchall()
 
         cursor.close()
