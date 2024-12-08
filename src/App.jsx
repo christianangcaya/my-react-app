@@ -14,7 +14,9 @@ import FinalReqPage from "./FinalReqPage";
 
 const Home = () => {
   return (
-    <main>
+    
+    <>
+      <Header/>
       <Eligibility />
       <div className="left-right">
         <div className="left">
@@ -25,7 +27,25 @@ const Home = () => {
           <Buttons />
         </div>
       </div>
-    </main>
+    </>
+  );
+};
+
+const About = () => {
+  return(
+    <>
+      <Header />
+      <AboutUs />
+    </>
+  );
+};
+
+const Faqs = () => {
+  return(
+    <>
+      <Header />
+      <FAQsPage />
+    </>
   );
 };
 
@@ -33,11 +53,10 @@ const App = () => {
   return (
     <div className="app">
       <Router>
-        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/faqs" element={<FAQsPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/faqs" element={<Faqs />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/finalreq" element={<FinalReqPage/>}></Route>
           <Route

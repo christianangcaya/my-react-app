@@ -65,7 +65,7 @@ const Secondq = ({ onPrevious, onClose }) => {
               <button className="close-button" onClick={onPrevious}>
                 Previous
               </button>
-              <button className="next-button" onClick={handleNext}>
+              <button className="close-button" onClick={handleNext}>
                 Next
               </button>
             </div>

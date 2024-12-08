@@ -159,7 +159,7 @@ const RegisterPopup = ({ onClose }) => {
             <button type="button" className="close-button" onClick={onClose}>
               Close
             </button>
-            <button type="submit" className="submit-button">
+            <button type="submit" className="close-button">
               Register
             </button>
           </div>
