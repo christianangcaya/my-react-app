@@ -10,6 +10,7 @@ import AboutUs from "./AboutUs";
 import FAQsPage from "./FAQsPage";
 import "./App.css";
 import Registration from "./Registration";
+import FinalReqPage from "./FinalReqPage";
 
 const Home = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/faqs" element={<FAQsPage />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/finalreq" element={<FinalReqPage/>}></Route>
           <Route
             path="/user"
             element={<div>User Profile Page Coming Soon</div>}

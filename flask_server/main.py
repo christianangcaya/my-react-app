@@ -1,4 +1,7 @@
-import re
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import re 
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import mysql.connector
@@ -80,15 +83,51 @@ def validate_name(name):
         return False
     return True
 
+# Function to send email
+def send_email(receiver_email, application_id, first_name, surname):
+    sender_email = "lgudaetscholarship8@gmail.com"  # Replace with your email
+    app_password = "jbmobjxodiyckvch"  # Replace with your app-specific password
+
+    subject = "Your Scholarship Application ID"
+    body = f"""
+        Dear {first_name} {surname},
+
+        Thank you for applying for the scholarship program. Your application has been successfully received.
+
+        Your Application ID is: {application_id}
+
+        Please keep this ID safe, as it will be required for future communications.
+
+        Best regards,
+        LGU Daet Scholarship Team
+        """
+
+    try:
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = receiver_email
+        message['Subject'] = subject
+
+        message.attach(MIMEText(body, 'plain'))
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login(sender_email, app_password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
 @app.route('/register', methods=['POST'])
 def register_user():
     try:
         data = request.json
-
+        print(data)
         surname = data.get('surname')
         first_name = data.get('firstName')
-        middle_name = data.get('middleName') if 'middle_name' in data else None
-        suffix_name = data['suffix_name'] if 'suffix_name' in data else None
+        middle_name = data.get('middleName') if 'middleName' in data else None
+        suffix_name = data.get('suffix') if 'suffix' in data else None
         birthdate_str = data.get('birthday')  # Birthdate is a string in 'YYYY-MM-DD' format
         email_address = data.get('email')
 
@@ -133,26 +172,12 @@ def register_user():
         cursor.close()
         conn.close()
 
+        # Send the application ID to the applicant's email
+        send_email(email_address, application_id, first_name, surname)
+
         return jsonify({"message": "User registered successfully!", "application_id": application_id}), 201
     except mysql.connector.IntegrityError:
         return jsonify({"error": "Email address already exists!"}), 409
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/registrations', methods=['GET'])
-def get_registrations():
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute("SELECT * FROM Applicants")
-        registrations = cursor.fetchall()
-
-        cursor.close()
-        conn.close()
-
-        return jsonify(registrations), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

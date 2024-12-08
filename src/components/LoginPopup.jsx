@@ -1,5 +1,9 @@
 import React from "react";
 import "./LoginPopup.css";
+//import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+
 
 const LoginPopup = ({ onClose }) => {
   return (
@@ -27,9 +31,9 @@ const LoginPopup = ({ onClose }) => {
             <button type="button" className="close-button" onClick={onClose}>
               Close
             </button>
-            <button type="submit" className="submit-button">
+            <Link type="submit" className="submit-button" to="/finalreq">
               Log In
-            </button>
+            </Link>
           </div>
         </form>
       </div>
