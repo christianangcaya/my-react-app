@@ -85,19 +85,20 @@ const Registration = () => {
     children_in_family: "",
     brother: "",
     sister: "",
-    itrUrl: PreviewIcon,
+    itrUrl: "",
     partners_name: "",
     no_of_children: "",
     partners_occupation: "",
     degree_program_course: "",
     non_degree_program_course: "",
-    eSignature: PreviewIcon,
+    eSignature: "",
   });
   const [awards, setAwards] = useState([
     { description: "", school: "", date: "" },
   ]);
   const fileUploadRef = useRef();
   const itrUploadRef = useRef();
+  const eSignatureUploadRef = useRef();
 
   // Profile Upload Handler
   const handleImageUpload = () => fileUploadRef.current.click();
@@ -119,7 +120,26 @@ const Registration = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prevData) => ({ ...prevData, itrUrl: reader.result }));
+        setFormData((prevData) => ({
+          ...prevData,
+          itrUrl: reader.result, // Store the uploaded file URL
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // E-Signature Upload Handler
+  const handleESignatureUpload = () => eSignatureUploadRef.current.click();
+  const handleESignatureFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({
+          ...prevData,
+          eSignatureUrl: reader.result, // Store the uploaded file URL
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -681,11 +701,12 @@ const Registration = () => {
               </div>
             </div>
             <div className="old_right">
-              <img
-                src={formData.itrUrl}
-                alt="ITR Preview"
-                className="itr-image"
-              />
+              <img src={PreviewIcon} alt="ITR Preview" className="itr-image" />
+              <p>
+                {formData.itrUrl
+                  ? "File Uploaded."
+                  : "Nothing's been uploaded yet."}
+              </p>
               <button
                 type="button"
                 onClick={handleITRUpload}
@@ -721,29 +742,56 @@ const Registration = () => {
               value={formData.no_of_children}
               onChange={handleChange}
             />
+            <InputField
+              id="parnters_occupation"
+              label="Partner's Occupation"
+              name="parnters_occupation"
+              value={formData.partners_occupation}
+              onChange={handleChange}
+            />
+            <InputField
+              id="partners_name"
+              label="Name of Husband/Wife"
+              name="partners_name"
+              value={formData.partners_name}
+              onChange={handleChange}
+            />
+            <InputField
+              id="partners_name"
+              label="Name of Husband/Wife"
+              name="partners_name"
+              value={formData.partners_name}
+              onChange={handleChange}
+            />
           </div>
-          <div className="personal-info">
-            <div className="info1-group">
-              <InputField
-                id="parnters_occupation"
-                label="Partner's Occupation"
-                name="parnters_occupation"
-                value={formData.partners_occupation}
-                onChange={handleChange}
+
+          {/* E-Signature */}
+          <div className="left-right">
+            <div className="old_left"></div>
+            <div className="old_right">
+              <img
+                src={PreviewIcon}
+                alt="E-Signature Preview"
+                className="itr-image"
               />
-              <InputField
-                id="partners_name"
-                label="Name of Husband/Wife"
-                name="partners_name"
-                value={formData.partners_name}
-                onChange={handleChange}
-              />
-              <InputField
-                id="partners_name"
-                label="Name of Husband/Wife"
-                name="partners_name"
-                value={formData.partners_name}
-                onChange={handleChange}
+              <p>
+                {formData.eSignatureUrl
+                  ? "File Uploaded."
+                  : "Nothing's been uploaded yet."}
+              </p>
+              <button
+                type="button"
+                onClick={handleESignatureUpload}
+                className="upload-button"
+              >
+                Upload E-Signature
+              </button>
+              <input
+                type="file"
+                ref={eSignatureUploadRef}
+                onChange={handleESignatureFileChange}
+                accept="application/pdf, image/*"
+                style={{ display: "none" }}
               />
             </div>
           </div>
