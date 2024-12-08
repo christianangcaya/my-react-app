@@ -6,25 +6,23 @@ import Eligibility from "./components/Eligibility";
 import Notice from "./components/Notice";
 import Documents from "./components/Documents";
 import Buttons from "./components/Button";
-import AboutUs from "./AboutUs"; 
+import AboutUs from "./AboutUs";
 import FAQsPage from "./FAQsPage";
 import "./App.css";
+import Registration from "./Registration";
 
 const Home = () => {
   return (
     <main>
       <Eligibility />
       <div className="left-right">
-
         <div className="left">
-        <Notice />
+          <Notice />
         </div>
-
         <div className="right">
-        <Documents />
-        <Buttons />
+          <Documents />
+          <Buttons />
         </div>
-
       </div>
     </main>
   );
@@ -38,13 +36,16 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/faqs" element={<FAQsPage/>} />
-          <Route path="/user" element={<div>User Profile Page Coming Soon</div>} />
+          <Route path="/faqs" element={<FAQsPage />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route
+            path="/user"
+            element={<div>User Profile Page Coming Soon</div>}
+          />
         </Routes>
         <Footer />
       </Router>
     </div>
   );
 };
-
 export default App;
