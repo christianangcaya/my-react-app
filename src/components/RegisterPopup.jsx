@@ -44,9 +44,9 @@ const RegisterPopup = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { surname, firstName, middleName } = formData;
+    const { surname, firstName } = formData;
     const namePattern = /^[A-Za-z\s]+$/;
-    if (!namePattern.test(surname) || !namePattern.test(firstName) || !namePattern.test(middleName)) {
+    if (!namePattern.test(surname) || !namePattern.test(firstName)) {
       setError("Name fields should contain only alphabets and spaces.");
       navigate("/registration"); //pag navigate
       return;
