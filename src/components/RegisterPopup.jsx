@@ -48,7 +48,6 @@ const RegisterPopup = ({ onClose }) => {
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(surname) || !namePattern.test(firstName) || !namePattern.test(middleName)) {
       setError("Name fields should contain only alphabets and spaces.");
-      navigate("/registration"); //pag navigate
       return;
     }
     console.log("Form Data being sent:", formData);
@@ -66,6 +65,7 @@ const RegisterPopup = ({ onClose }) => {
       if (response.ok) {
         alert(`Registration successful. Application ID: ${data.application_id}`);
         onClose();  // Close the popup after successful registration
+        navigate("/registration"); //pag navigate
       } else {
         setError(data.error || "An error occurred. Please try again.");
       }

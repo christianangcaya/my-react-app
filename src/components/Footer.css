@@ -1,4 +1,9 @@
 .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
     background-color: #343a40;
     color: #ccc;
     padding: 20px 30px;
@@ -15,14 +20,24 @@
     list-style: none;
     padding: 0;
     margin: 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
   }
   
   .footer ul li {
     margin: 5px 0;
   }
+
+  .footer li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
   
   .footer img {
     width: 50px;
-    margin: 10px 0;
+    margin-right: 10px;
   }
   
