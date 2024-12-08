@@ -28,8 +28,8 @@ def initialize_database():
                 application_id VARCHAR(10) PRIMARY KEY,
                 surname VARCHAR(100),
                 first_name VARCHAR(100),
-                middle_name VARCHAR(100),
-                suffix_name VARCHAR(50),
+                middle_name VARCHAR(100) DEFAULT NULL,
+                suffix_name VARCHAR(50) DEFAULT NULL,
                 birthdate DATE,
                 email_address VARCHAR(150) UNIQUE,
                 status VARCHAR(50) DEFAULT 'applicant'
@@ -87,31 +87,34 @@ def register_user():
 
         surname = data.get('surname')
         first_name = data.get('firstName')
-        middle_name = data.get('middleName')
+        middle_name = data.get('middleName') if 'middle_name' in data else None
         suffix_name = data['suffix_name'] if 'suffix_name' in data else None
         birthdate_str = data.get('birthday')  # Birthdate is a string in 'YYYY-MM-DD' format
         email_address = data.get('email')
+
+        # Check if birthdate is provided
+        if not birthdate_str:
+            return jsonify({"error": "Birthdate is required"}), 400
 
         # Validate names
         if not validate_name(surname):
             return jsonify({"error": "Surname must contain only alphabets"}), 400
         if not validate_name(first_name):
             return jsonify({"error": "First name must contain only alphabets"}), 400
-        if not validate_name(middle_name):
+        if middle_name and not validate_name(middle_name):
             return jsonify({"error": "Middle name must contain only alphabets"}), 400
 
         # Validate birthdate format and age
         birthdate = None
-        if birthdate_str:
-            try:
-                birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d').date()
-                today = date.today()
-                age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-                
-                if age < 18:
-                    return jsonify({"error": "Applicants must be at least 18 years old"}), 400
-            except ValueError:
-                return jsonify({"error": "Invalid birthdate format. Expected format: YYYY-MM-DD"}), 400
+        try:
+            birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d').date()
+            today = date.today()
+            age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+            
+            if age < 18:
+                return jsonify({"error": "Applicants must be at least 18 years old"}), 400
+        except ValueError:
+            return jsonify({"error": "Invalid birthdate format. Expected format: YYYY-MM-DD"}), 400
 
         application_id = generate_application_id()
         if not application_id:
