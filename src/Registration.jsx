@@ -798,7 +798,6 @@ const Registration = () => {
           <div className="left-right">
             <div className="old_left"></div>
             <div className="old_right">
-              // E-Signature Preview
               <img
                 src={formData.eSignature}
                 alt="E-Signature Preview"
