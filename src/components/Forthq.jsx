@@ -11,7 +11,6 @@ const Fourthq = ({ onPrevious, onClose }) => {
 
   const [showNextPopup, setShowNextPopup] = useState(false);
 
-  // Handle the selection of a radio button
   const handleSelection = (name, value) => {
     setAnswers((prev) => ({
       ...prev,
@@ -19,26 +18,18 @@ const Fourthq = ({ onPrevious, onClose }) => {
     }));
   };
 
-  // Handle the Next button click
+
   const handleNext = () => {
     if (answers.goodMoral === "yes" && answers.noScholarship === "yes") {
       setShowNextPopup(true);
-      // onClose();
-      // Swal.fire({
-      //   title: "Congratulations!",
-      //   text: "You are eligible to proceed",
-      //   icon: "success",
-      //   confirmButtonText: "OK",
-      // })
     } else {
-      // alert("You must meet all eligibility criteria to proceed.");
       onClose();
       Swal.fire({
         title: "Youre not Eligible",
         text: "You are not eligible to proceed",
         icon: "error",
         confirmButtonText: "OK",
-      })
+      });
     }
   };
 
@@ -63,7 +54,9 @@ const Fourthq = ({ onPrevious, onClose }) => {
                     name="goodMoral"
                     value="yes"
                     checked={answers.goodMoral === "yes"}
-                    onChange={(e) => handleSelection("goodMoral", e.target.value)}
+                    onChange={(e) =>
+                      handleSelection("goodMoral", e.target.value)
+                    }
                   />
                   Yes
                 </label>
@@ -73,7 +66,9 @@ const Fourthq = ({ onPrevious, onClose }) => {
                     name="goodMoral"
                     value="no"
                     checked={answers.goodMoral === "no"}
-                    onChange={(e) => handleSelection("goodMoral", e.target.value)}
+                    onChange={(e) =>
+                      handleSelection("goodMoral", e.target.value)
+                    }
                   />
                   No
                 </label>
@@ -89,7 +84,9 @@ const Fourthq = ({ onPrevious, onClose }) => {
                     name="noScholarship"
                     value="yes"
                     checked={answers.noScholarship === "yes"}
-                    onChange={(e) => handleSelection("noScholarship", e.target.value)}
+                    onChange={(e) =>
+                      handleSelection("noScholarship", e.target.value)
+                    }
                   />
                   Yes
                 </label>
@@ -99,7 +96,9 @@ const Fourthq = ({ onPrevious, onClose }) => {
                     name="noScholarship"
                     value="no"
                     checked={answers.noScholarship === "no"}
-                    onChange={(e) => handleSelection("noScholarship", e.target.value)}
+                    onChange={(e) =>
+                      handleSelection("noScholarship", e.target.value)
+                    }
                   />
                   No
                 </label>

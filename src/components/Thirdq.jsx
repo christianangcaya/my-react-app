@@ -21,7 +21,7 @@ const Thirdq = ({ onPrevious, onClose }) => {
       onClose();
       Swal.fire({
         title: "Youre not Eligible",
-        text: "You are not eligible to proceed",
+        text: "You must meet all eligibility criteria to proceed",
         icon: "error",
         confirmButtonText: "OK",
       })
