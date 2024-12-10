@@ -1,17 +1,29 @@
 import React from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom"; 
 import "./LoginPopup.css";
-//import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-
-
 
 const LoginPopup = ({ onClose }) => {
+  const navigate = useNavigate(); 
+
+  const handleLoginClick = (e) => {
+    onClose();
+    e.preventDefault();
+    Swal.fire({
+      title: "Log In Successful",
+      text: "Welcome back! You will be redirected to Final Requiremnets Page.",
+      icon: "success",
+      confirmButtonText: "OK",
+    }).then(() => {
+      navigate("/finalreq");
+    });
+  };
+  
   return (
     <div className="popup-overlay">
       <div className="popup">
-        <h2>Sign In In</h2>
+        <h2>Sign In</h2>
         <form className="login-form">
-
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input type="email" id="email" placeholder="Enter your email" />
@@ -31,9 +43,9 @@ const LoginPopup = ({ onClose }) => {
             <button type="button" className="close-button" onClick={onClose}>
               Close
             </button>
-            <Link type="submit" className="close-button" to="/finalreq">
+            <button type="button" className="close-button" onClick={handleLoginClick}>
               Log In
-            </Link>
+            </button>
           </div>
         </form>
       </div>

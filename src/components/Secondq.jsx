@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import Thirdq from "./Thirdq";
 import "./Questions.css";
+import Swal from "sweetalert2";
 
 const Secondq = ({ onPrevious, onClose }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const [showNextPopup, setShowNextPopup] = useState(false);
 
-  // Handle the selection of a radio button
+
   const handleSelection = (value) => {
     setSelectedOption(value);
   };
 
-  // Handle the Next button click
   const handleNext = () => {
     if (selectedOption === "yes") {
-      setShowNextPopup(true); // Proceed to the next popup
+      setShowNextPopup(true); 
     } else {
-      alert("You must meet the eligibility criteria to proceed.");
+      //alert("You must meet the eligibility criteria to proceed.");
+      onClose();
+      Swal.fire({
+        title: "Youre not Eligible",
+        text: "You are not eligible to proceed",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   };
 

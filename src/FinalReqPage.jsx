@@ -1,7 +1,34 @@
 import React, { useState } from "react";
 import "./FinalReqPage.css";
+import Swal from "sweetalert2"; 
+import { useNavigate } from "react-router-dom";
+
 
 const FinalReqPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of the system.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Logged Out",
+          "You have been successfully logged out.",
+          "success"
+        ).then(() => {
+          navigate("/"); 
+        });
+      }
+    });
+  };
+
   const [showPopup, setShowPopup] = useState(false);
   const [currentFileType, setCurrentFileType] = useState("");
 
@@ -17,7 +44,7 @@ const FinalReqPage = () => {
   return (
     <div className="application-page">
       <header className="lg-btn">
-        <button className="logout-button">LOG OUT</button>
+        <button className="logout-button" onClick={handleLogout}>LOG OUT</button>
       </header>
       <div className="application-details">
         <h3>APPLICATION ID: 0N2WDWV037FBD</h3>
