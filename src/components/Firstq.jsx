@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Secondq from "./Secondq";
 import "./Questions.css";
+import Swal from "sweetalert2";
 
 const Firstq = ({ onClose }) => {
   const [eligibility, setEligibility] = useState({
@@ -10,7 +11,7 @@ const Firstq = ({ onClose }) => {
 
   const [showNextPopup, setShowNextPopup] = useState(false);
 
-  // Handle changes for radio buttons
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEligibility((prev) => ({
@@ -19,12 +20,19 @@ const Firstq = ({ onClose }) => {
     }));
   };
 
-  // Handle "Next" button click
+
   const handleNext = () => {
     if (eligibility.isResident === "yes" && eligibility.isVoter === "yes") {
-      setShowNextPopup(true); // Show the Second Popup
+      setShowNextPopup(true); 
     } else {
-      alert("You are not eligible to proceed.");
+      // alert("You are not eligible to proceed.");
+      onClose();
+      Swal.fire({
+        title: "Youre not Eligible",
+        text: "You are not eligible to proceed",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   };
 

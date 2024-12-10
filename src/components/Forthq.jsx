@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Fifthq from "./RegisterPopup";
 import "./Questions.css";
+import Swal from "sweetalert2";
 
 const Fourthq = ({ onPrevious, onClose }) => {
   const [answers, setAnswers] = useState({
@@ -21,9 +22,23 @@ const Fourthq = ({ onPrevious, onClose }) => {
   // Handle the Next button click
   const handleNext = () => {
     if (answers.goodMoral === "yes" && answers.noScholarship === "yes") {
-      setShowNextPopup(true); // Proceed to the next popup if both are "Yes"
+      setShowNextPopup(true);
+      // onClose();
+      // Swal.fire({
+      //   title: "Congratulations!",
+      //   text: "You are eligible to proceed",
+      //   icon: "success",
+      //   confirmButtonText: "OK",
+      // })
     } else {
-      alert("You must meet all eligibility criteria to proceed.");
+      // alert("You must meet all eligibility criteria to proceed.");
+      onClose();
+      Swal.fire({
+        title: "Youre not Eligible",
+        text: "You are not eligible to proceed",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   };
 
@@ -91,7 +106,6 @@ const Fourthq = ({ onPrevious, onClose }) => {
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="form-buttons">
               <button className="close-button" onClick={onPrevious}>
                 Previous
