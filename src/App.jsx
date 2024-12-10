@@ -14,7 +14,6 @@ import FinalReqPage from "./FinalReqPage";
 
 const Home = () => {
   return (
-    
     <>
       <Header/>
       <Eligibility />
