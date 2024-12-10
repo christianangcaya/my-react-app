@@ -41,6 +41,20 @@ const FinalReqPage = () => {
     setShowPopup(false);
   };
 
+  const handleUpload = () => {
+    //digdi mo lalagay pag kuha ng file
+    //next update status
+    //next save sa db 
+    setShowPopup(false); // pang close popup
+    Swal.fire({
+      title: "File Uploaded",
+      text: "File Successfully Uploded",
+      icon: "success",
+      confirmButtonText: "OK",
+    })
+
+  }
+
   return (
     <div className="application-page">
       <header className="lg-btn">
@@ -232,7 +246,7 @@ const FinalReqPage = () => {
               <button onClick={closePopup} className="close-button">
                 Cancel
               </button>
-              <button className="upload-button">Upload</button>
+              <button className="close-button" onClick={handleUpload}>Upload</button>
             </div>
           </div>
         </div>
