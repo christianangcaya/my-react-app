@@ -592,5 +592,24 @@ def submit_initial_requirements():
         print("Error:", e)
         return jsonify({"error": "An error occurred while processing the data."}), 500
 
+
+UPLOAD_FOLDER = 'static/uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/submit-all', methods=['POST'])
+def submit_all():
+    if not request.files:
+        return jsonify({"message": "No files uploaded"}), 400
+
+    saved_files = []
+    for file_type, file in request.files.items():
+        filename = f"{file_type}_{file.filename}"  # Prefix filename with its type
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        saved_files.append(file_path)
+
+    return jsonify({"message": "Files uploaded successfully", "files": saved_files}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)

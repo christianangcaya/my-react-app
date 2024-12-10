@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "./FinalReqPage.css";
 import Swal from "sweetalert2"; 
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 
 const FinalReqPage = () => {
   const navigate = useNavigate();
+  const [files, setFiles] = useState({});
 
   const handleLogout = () => {
     Swal.fire({
@@ -39,6 +40,42 @@ const FinalReqPage = () => {
 
   const closePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFiles((prevFiles) => ({
+        ...prevFiles,
+        [currentFileType]: file, // Store file by type
+      }));
+      Swal.fire("File Selected", `File for ${currentFileType} has been added temporarily.`, "success");
+      closePopup();
+    }
+  };
+
+  const handleSubmitAll = () => {
+    if (Object.keys(files).length === 0) {
+      Swal.fire("Error", "No files uploaded to submit.", "error");
+      return;
+    }
+
+    const formData = new FormData();
+    for (const [fileType, file] of Object.entries(files)) {
+      formData.append(fileType, file); // Add each file with its type as the key
+    }
+
+    // Send files to Flask
+    axios
+      .post("http://localhost:5000/submit-all", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        Swal.fire("Success", "All files uploaded successfully.", "success");
+      })
+      .catch((error) => {
+        Swal.fire("Error", "Failed to upload files.", "error");
+      });
   };
 
   const handleUpload = () => {
@@ -235,13 +272,13 @@ const FinalReqPage = () => {
         </table>
       </div>
 
-      <button className="submit-button">SUBMIT ALL</button>
+      <button className="submit-button" onClick={handleSubmitAll}>SUBMIT ALL</button>
 
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
             <h3>Upload File for: {currentFileType}</h3>
-            <input type="file" />
+            <input type="file" onChange={handleFileChange}/>
             <div className="popup-buttons">
               <button onClick={closePopup} className="close-button">
                 Cancel
