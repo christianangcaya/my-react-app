@@ -1,43 +1,58 @@
 .footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #343a40;
-    color: #ccc;
-    padding: 20px 30px;
-    text-align: center;
-    border-top: 2px solid #444;
-  }
-  
-  .footer p {
-    margin: 5px 0;
-    color: #ccc;
-  }
-  
-  .footer ul {
-    list-style: none;
-    padding: 0;
-    margin: 5px 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .footer ul li {
-    margin: 5px 0;
-  }
+  font-family: "Inter", sans-serif; /* Fixed font-family name */
+  background-color: rgba(78, 74, 59, 0.45); /* Maintains opacity */
+  display: flex;
+  flex-wrap: wrap; /* Ensures responsiveness for smaller screens */
+  margin: 0 auto; /* Center footer horizontally */
+  padding: 20px;
+  align-items: center; /* Aligns items vertically */
+  justify-content: space-between; /* Distributes sections evenly */
+}
 
-  .footer li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .footer img {
-    width: 50px;
-    margin-right: 10px;
-  }
-  
+.section1 {
+  flex: 1;
+  padding: 20px;
+  font-size: 16px;
+}
+
+.section1 p {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.section1 ul {
+  list-style: none; /* Removes default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+.section1 li {
+  display: flex;
+  align-items: center; /* Align icon and text */
+  margin-bottom: 10px; /* Adds space between list items */
+}
+
+.section1 img {
+  width: 25px; /* Adjust icon size */
+  height: 25px;
+  margin-right: 10px; /* Adds space between icon and text */
+}
+
+.section2 {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Centers the logo */
+  align-items: center;
+}
+
+.section2 img {
+  max-width: 150px; /* Prevents the logo from being too large */
+  height: auto;
+}
+
+.section3 {
+  flex: 1;
+  text-align: center; /* Centers text in this section */
+  font-size: 14px;
+  color: #333; /* Adjusts text color for better visibility */
+}

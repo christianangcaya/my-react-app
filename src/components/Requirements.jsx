@@ -11,51 +11,68 @@ const Requirements = ({ isOpen, onClose }) => {
         <div className="popup-content">
           <h3>Initial Requirements</h3>
           <ul>
-            <li>BIR Form 1701 (Annual Income Tax Return) of both parents that shows the gross income.</li>
+            <li>
+              <b>BIR Form 1701</b> (Annual Income Tax Return) of both parents
+              that shows the gross income.
+            </li>
           </ul>
           <h3>Final Requirements</h3>
           <ul>
-            <li>Certified True Copy of Birth Certificate</li>
             <li>
-              Original Certification from Punong Barangay that the applicant is a bonafide indigent resident of their
-              barangay.
+              <b>Certified True Copy</b> of Birth Certificate
             </li>
             <li>
-              Original COMELEC Voter’s Certification of the applicant; if minor, voters certification of parent or
-              guardian.
+              <b>Original</b> Certification from Punong Barangay that the
+              applicant is a bonafide indigent resident of their barangay.
             </li>
             <li>
-              Certified True Copy of Report Card or Form 138 (except for ALS); Certificate of Grades (COG) for college
-              level.
+              <b>Original</b> COMELEC Voter’s Certification of the applicant; if
+              minor, voters certification of parent or guardian.
             </li>
             <li>
-              <ul>
-                <li>
-                  Certified True Copy of Good Moral Character signed by the principal for senior high school graduate.
-                </li>
-                <li>
-                  Certified True Copy of Good Moral Character signed by the guidance counselor for college level.
-                </li>
-                <li>
-                  Original Certificate of Good Moral Character signed by the Punong Barangay for out-of-school youth.
-                </li>
-              </ul>
+              <b>Certified True Copy</b> of Report Card or Form 138 (except for
+              ALS); Certificate of Grades (COG) for college level.
             </li>
             <li>
-              <ul>
-                <li>Original Certificate from PDAO for PWD or;</li>
-                <li>Original Certificate from Municipal Agriculture Office for farmers or fisher folks' children;</li>
-                <li>Original Certificate from MSWDO for solo parent’s children or solo parent applicant.</li>
-              </ul>
+              <li>
+                <b>Certified True Copy</b> of Good Moral Character signed by the
+                principal for senior high school graduate.
+              </li>
+              <li>
+                <b>Certified True Copy</b> of Good Moral Character signed by the
+                guidance counselor for college level.
+              </li>
+              <li>
+                <b>Original</b> Certificate of Good Moral Character signed by
+                the Punong Barangay for out-of-school youth.
+              </li>
             </li>
-            <li>Original or Certified True Copy of enrollment/registration form.</li>
             <li>
-              Original or Certified True Copy of certification from MSWDO that the qualified scholar belongs to the
-              indigent family of the municipality.
+              <li>
+                <b>Original</b> Certificate from PDAO for PWD or;
+              </li>
+              <li>
+                <b>Original</b> Certificate from Municipal Agriculture Office
+                for farmers or fisher folks' children;
+              </li>
+              <li>
+                <b>Original</b> Certificate from MSWDO for solo parent’s
+                children or solo parent applicant.
+              </li>
             </li>
             <li>
-              Certification by the parents or guardians that the applicant is not enjoying any government or private
-              scholarship grants.
+              <b>Original</b> or <b>Certified True Copy</b> of
+              enrollment/registration form.
+            </li>
+            <li>
+              <b>Original</b> or <b>Certified True Copy</b> of certification
+              from MSWDO that the qualified scholar belongs to the indigent
+              family of the municipality.
+            </li>
+            <li>
+              <b>Certification</b> by the parents or guardians that the
+              applicant is not enjoying any government or private scholarship
+              grants.
             </li>
           </ul>
         </div>

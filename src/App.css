@@ -1,15 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 .left-right {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .left,
-  .right {
-    flex: 1;
-    padding: 10px;
-    margin: 0 10px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.left,
+.right {
+  flex: 1;
+  padding: 10px;
+  margin: 0 10px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

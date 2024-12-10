@@ -1,52 +1,52 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #fff;
-    border-bottom: 2px solid #ddd;
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo-img {
-    width: 50px;
-    margin-right: 15px;
-  }
-  
-  .logo h1 {
-    font-size: 18px;
-    margin: 0;
-    color: #333;
-  }
-  
-  .logo p {
-    font-size: 12px;
-    margin: 0;
-    color: #555;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-  }
-  
-  .nav-links li a {
-    text-decoration: none;
-    color: #555;
-    font-weight: bold;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-links li a:hover {
-    color: #007bff;
-  }
-  
-  .user-icon {
-    width: 25px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #fff;
+  border-bottom: 2px solid #ddd;
+  font-family: "Inter", sans-serif;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px;
+  margin-right: 15px;
+}
+
+.logo h1 {
+  font-size: 18px;
+  margin: 0;
+  color: #333;
+}
+
+.logo p {
+  font-size: 12px;
+  margin: 0;
+  color: #555;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #555;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #007bff;
+}
+
+.user-icon {
+  width: 25px;
+}

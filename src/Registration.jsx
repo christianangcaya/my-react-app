@@ -52,10 +52,11 @@ const gradeYearOptions = {
 const Registration = () => {
   const [formData, setFormData] = useState({
     avatarURL: DefaultImage,
-    grantType: "",
-    sexValue: "",
+    grant_type: "",
+    sex: "",
     civilStatus: "",
     birthdate: "",
+    applicant_id: "",
     name: { lastName: "", firstName: "", middleName: "", suffix: "" },
     age: "",
     religion: "",
@@ -66,7 +67,7 @@ const Registration = () => {
       street: "",
       municipality: "",
     },
-    contact_no: "",
+    contact_number: "",
     email_address: "",
     educ_attainment: "",
     highest_grade_year: "",
@@ -83,14 +84,14 @@ const Registration = () => {
     mother_address: "",
     mother_occupation: "",
     gross_income: "",
-    children_in_family: "",
-    brother: "",
-    sister: "",
+    number_of_siblings: "",
+    number_of_brothers: "",
+    number_of_sisters: "",
     itrUrl: PreviewIcon,
-    partners_name: "",
-    no_of_children: "",
-    partners_occupation: "",
-    partners_course: "",
+    partner_name: "",
+    number_of_children: "",
+    partner_occupation: "",
+    partner_course: "",
     eSignature: PreviewIcon,
   });
   const [awards, setAwards] = useState([
@@ -101,6 +102,29 @@ const Registration = () => {
   const fileUploadRef = useRef();
   const itrUploadRef = useRef();
   const eSignatureUploadRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/submit_initial_requirements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Registration successful!");
+        console.log(data);
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
 
   // Profile Upload Handler
   const handleImageUpload = () => fileUploadRef.current.click();
@@ -207,6 +231,7 @@ const Registration = () => {
 
   return (
     <>
+    <form onSubmit={handleSubmit}>
       <div className="application-header">
         <h2>DAET EXPANDED SCHOLARSHIP PROGRAM</h2>
         <p>(Per Municipal Ordinance No. 372 S. 2018)</p>
@@ -232,18 +257,18 @@ const Registration = () => {
               <div className="radio-options">
                 <RadioOption
                   id="degree-course"
-                  name="grantType"
+                  name="grant_type"
                   value="Degree Course"
                   label="Degree Course"
-                  checked={formData.grantType === "Degree Course"}
+                  checked={formData.grant_type === "Degree Course"}
                   onChange={handleChange}
                 />
                 <RadioOption
                   id="non-degree-course"
-                  name="grantType"
+                  name="grant_type"
                   value="Non-Degree Course"
                   label="Non-Degree Course"
-                  checked={formData.grantType === "Non-Degree Course"}
+                  checked={formData.grant_type === "Non-Degree Course"}
                   onChange={handleChange}
                 />
               </div>
@@ -282,6 +307,13 @@ const Registration = () => {
           {/* Name Information */}
           <div className="personal-info">
             <p>Name:</p>
+            <InputField
+              id="app_id"
+              label="Applicant ID"
+              name="applicant_id"
+              value={formData.applicant_id}
+              onChange={handleChange}
+            />
             <InputField
               id="lname"
               label="Last Name"
@@ -424,9 +456,9 @@ const Registration = () => {
             <InputField
               id="contact_no"
               label="Contact Number"
-              name="contact_no"
+              name="contact_number"
               type="number"
-              value={formData.contact_no}
+              value={formData.contact_number}
               onChange={handleChange}
             />
             <InputField
@@ -704,10 +736,10 @@ const Registration = () => {
                 />
                 <InputField
                   id="children_in_family"
-                  label="Number of Children in Family"
-                  name="children_in_family"
+                  label="Number of Siblings in Family"
+                  name="number_of_siblings"
                   type="number"
-                  value={formData.children_in_family}
+                  value={formData.number_of_siblings}
                   onChange={handleChange}
                 />
               </div>
@@ -715,17 +747,17 @@ const Registration = () => {
                 <InputField
                   id="brother"
                   label="No. of Brothers."
-                  name="brother"
+                  name="number_of_brothers"
                   type="number"
-                  value={formData.brother}
+                  value={formData.number_of_brothers}
                   onChange={handleChange}
                 />
                 <InputField
                   id="sister"
                   label="No. of Sisters."
-                  name="sister"
+                  name="number_of_sisters"
                   type="number"
-                  value={formData.sister}
+                  value={formData.number_of_sisters}
                   onChange={handleChange}
                 />
               </div>
@@ -768,33 +800,33 @@ const Registration = () => {
             <InputField
               id="partners_name"
               label="Name of Husband/Wife"
-              name="partners_name"
-              value={formData.partners_name}
+              name="partner_name"
+              value={formData.partner_name}
               onChange={handleChange}
             />
             <InputField
               id="no_of_children"
               label="Number of Children"
-              name="no_of_children"
+              name="number_of_children"
               type="number"
-              value={formData.no_of_children}
+              value={formData.number_of_children}
               onChange={handleChange}
             />
             <InputField
               id="parnters_occupation"
               label="Partner's Occupation"
-              name="parnters_occupation"
-              value={formData.partners_occupation}
+              name="partner_occupation"
+              value={formData.partner_occupation}
               onChange={handleChange}
             />
             <div className="info1-group">
               <label>Course Type:</label>
               <RadioOption
                 id="partners_course"
-                name="partners_course"
+                name="partner_course"
                 value="Degree Course"
                 label="Degree Course"
-                checked={formData.father_status === "Degree Course"}
+                checked={formData.partner_course === "Degree Course"}
                 onChange={handleChange}
               />
               <RadioOption
@@ -802,7 +834,7 @@ const Registration = () => {
                 name="partners_course"
                 value="Non-Degree Course"
                 label="Non-Degree Course"
-                checked={formData.father_status === "Non-Degree Course"}
+                checked={formData.partner_course === "Non-Degree Course"}
                 onChange={handleChange}
               />
             </div>
@@ -846,7 +878,7 @@ const Registration = () => {
       </div>
       <div className="submit-container">
         <button
-          type="button"
+          type="submit"
           onClick={() => console.log("formData:", formData)}
           className="submit-btn"
         >
@@ -860,6 +892,7 @@ const Registration = () => {
           imageSrc={selectedImage}
         />
       </>
+    </form>
     </>
   );
 };
