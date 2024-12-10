@@ -172,6 +172,21 @@
   max-height: 90%;
 }
 
+.submit-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 30px;
+}
+
 .close-preview {
   position: absolute;
   top: 10px;

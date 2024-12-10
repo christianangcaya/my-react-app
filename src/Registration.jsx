@@ -73,6 +73,7 @@ const Registration = () => {
     gwa: "",
     school_name: "",
     school_type: "",
+    awards: [],
     father_status: "",
     father_name: "",
     father_address: "",
@@ -89,8 +90,7 @@ const Registration = () => {
     partners_name: "",
     no_of_children: "",
     partners_occupation: "",
-    degree_program_course: "",
-    non_degree_program_course: "",
+    partners_course: "",
     eSignature: PreviewIcon,
   });
   const [awards, setAwards] = useState([
@@ -186,10 +186,19 @@ const Registration = () => {
     const updatedAwards = [...awards];
     updatedAwards[index][field] = value;
     setAwards(updatedAwards);
+    setFormData((prevData) => ({
+      ...prevData,
+      awards: updatedAwards,
+    }));
   };
 
   const addAwardRow = () => {
-    setAwards([...awards, { description: "", school: "", date: "" }]);
+    const newAwards = [...awards, { description: "", school: "", date: "" }];
+    setAwards(newAwards);
+    setFormData((prevData) => ({
+      ...prevData,
+      awards: newAwards,
+    }));
   };
 
   const removeAwardRow = (index) => {
@@ -600,7 +609,7 @@ const Registration = () => {
                 <RadioOption
                   id="father_living"
                   name="father_status"
-                  value="living"
+                  value="Living"
                   label="Living"
                   checked={formData.father_status === "Living"}
                   onChange={handleChange}
@@ -608,9 +617,9 @@ const Registration = () => {
                 <RadioOption
                   id="father_deceased"
                   name="father_status"
-                  value="deceased"
-                  label="deceased"
-                  checked={formData.father_status === "deceased"}
+                  value="Deceased"
+                  label="Deceased"
+                  checked={formData.father_status === "Deceased"}
                   onChange={handleChange}
                 />
               </div>
@@ -643,7 +652,7 @@ const Registration = () => {
                 <RadioOption
                   id="mother_living"
                   name="mother_status"
-                  value="living"
+                  value="Living"
                   label="Living"
                   checked={formData.mother_status === "Living"}
                   onChange={handleChange}
@@ -651,9 +660,9 @@ const Registration = () => {
                 <RadioOption
                   id="mother_deceased"
                   name="mother_status"
-                  value="deceased"
-                  label="deceased"
-                  checked={formData.mother_status === "deceased"}
+                  value="Deceased"
+                  label="Deceased"
+                  checked={formData.mother_status === "Deceased"}
                   onChange={handleChange}
                 />
               </div>
@@ -778,20 +787,25 @@ const Registration = () => {
               value={formData.partners_occupation}
               onChange={handleChange}
             />
-            <InputField
-              id="partners_name"
-              label="Name of Husband/Wife"
-              name="partners_name"
-              value={formData.partners_name}
-              onChange={handleChange}
-            />
-            <InputField
-              id="partners_name"
-              label="Name of Husband/Wife"
-              name="partners_name"
-              value={formData.partners_name}
-              onChange={handleChange}
-            />
+            <div className="info1-group">
+              <label>Course Type:</label>
+              <RadioOption
+                id="partners_course"
+                name="partners_course"
+                value="Degree Course"
+                label="Degree Course"
+                checked={formData.father_status === "Degree Course"}
+                onChange={handleChange}
+              />
+              <RadioOption
+                id="partners_course"
+                name="partners_course"
+                value="Non-Degree Course"
+                label="Non-Degree Course"
+                checked={formData.father_status === "Non-Degree Course"}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* E-Signature */}
@@ -830,16 +844,21 @@ const Registration = () => {
           </div>
         </div>
       </div>
+      <div className="submit-container">
+        <button
+          type="button"
+          onClick={() => console.log("formData:", formData)}
+          className="submit-btn"
+        >
+          Submit
+        </button>
+      </div>
       <>
-        {/* Other components and JSX */}
-
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           imageSrc={selectedImage}
         />
-
-        {/* Other components and JSX */}
       </>
     </>
   );
