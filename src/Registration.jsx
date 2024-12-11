@@ -105,87 +105,130 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const uploadData = new FormData();
+
+    // Add files to FormData
+    if (formData.avatarURL !== DefaultImage) {
+      uploadData.append(
+        "avatar",
+        dataURItoBlob(formData.avatarURL),
+        "avatar.png"
+      );
+    }
+    if (formData.itrUrl !== PreviewIcon) {
+      uploadData.append("itr", dataURItoBlob(formData.itrUrl), "itr.png");
+    }
+    if (formData.eSignature !== PreviewIcon) {
+      uploadData.append(
+        "eSignature",
+        dataURItoBlob(formData.eSignature),
+        "eSignature.png"
+      );
+    }
+
+    // Assuming uploadData is a FormData object and formData is your source object
+    uploadData.append("grant_type", formData.grant_type);
+    uploadData.append("sex", formData.sex);
+    uploadData.append("civilStatus", formData.civilStatus);
+    uploadData.append("birthdate", formData.birthdate);
+    uploadData.append("applicant_id", formData.applicant_id);
+    uploadData.append("lastName", formData.name.lastName);
+    uploadData.append("firstName", formData.name.firstName);
+    uploadData.append("middleName", formData.name.middleName);
+    uploadData.append("suffix", formData.name.suffix);
+    uploadData.append("age", formData.age);
+    uploadData.append("religion", formData.religion);
+    uploadData.append("place_of_birth", formData.place_of_birth);
+
+    // Permanent Address
+    uploadData.append("barangay", formData.permanent_address.barangay);
+    uploadData.append("purok", formData.permanent_address.purok);
+    uploadData.append("street", formData.permanent_address.street);
+    uploadData.append("municipality", formData.permanent_address.municipality);
+
+    uploadData.append("contact_number", formData.contact_number);
+    uploadData.append("email_address", formData.email_address);
+    uploadData.append("educ_attainment", formData.educ_attainment);
+    uploadData.append("highest_grade_year", formData.highest_grade_year);
+    uploadData.append("gwa", formData.gwa);
+    uploadData.append("school_name", formData.school_name);
+    uploadData.append("school_type", formData.school_type);
+
+    // Awards (assuming it's an array, you may need to handle it differently)
+    formData.awards.forEach((award, index) => {
+      uploadData.append(`awards[${index}]`, award);
+    });
+
+    uploadData.append("father_status", formData.father_status);
+    uploadData.append("father_name", formData.father_name);
+    uploadData.append("father_address", formData.father_address);
+    uploadData.append("father_occupation", formData.father_occupation);
+
+    uploadData.append("mother_status", formData.mother_status);
+    uploadData.append("mother_name", formData.mother_name);
+    uploadData.append("mother_address", formData.mother_address);
+    uploadData.append("mother_occupation", formData.mother_occupation);
+
+    uploadData.append("gross_income", formData.gross_income);
+    uploadData.append("number_of_siblings", formData.number_of_siblings);
+    uploadData.append("number_of_brothers", formData.number_of_brothers);
+    uploadData.append("number_of_sisters", formData.number_of_sisters);
+
+    uploadData.append("partner_name", formData.partner_name);
+    uploadData.append("number_of_children", formData.number_of_children);
+    uploadData.append("partner_occupation", formData.partner_occupation);
+    uploadData.append("partner_course", formData.partner_course);
+
+    for (let [key, value] of uploadData.entries()) {
+      console.log(`${key}:`, value);
+    }
     try {
       const response = await fetch(
         "http://localhost:5000/submit_initial_requirements",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: uploadData,
         }
       );
 
-      const data = await response.json();
+      const result = await response.json();
       if (response.ok) {
-        alert("Registration successful!");
-        console.log(data);
+        alert("Form submitted successfully!");
+        console.log(result);
       } else {
-        alert(`Error: ${data.error}`);
+        alert(`Submission failed: ${result.error}`);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Error during submission:", error);
+      alert("An error occurred during the submission. Please try again.");
     }
   };
 
-  // Profile Upload Handler
-  const handleImageUpload = () => fileUploadRef.current.click();
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prevData) => ({ ...prevData, avatarURL: reader.result }));
-      };
-      reader.readAsDataURL(file);
+  // Utility to convert Data URL to Blob
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
     }
+    return new Blob([ab], { type: mimeString });
   };
 
-  // ITR Upload Handler
-  const handleITRUpload = () => itrUploadRef.current.click();
-  const handleITRFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prevData) => ({
-          ...prevData,
-          itrUrl: reader.result, // Store the uploaded file URL
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // E-Signature Upload Handler
-  const handleESignatureUpload = () => eSignatureUploadRef.current.click();
-  const handleESignatureFileChange = (event) => {
+  const handleFileUpload = (event, fieldName) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prevData) => ({
           ...prevData,
-          eSignature: reader.result, // Store the uploaded file URL
+          [fieldName]: reader.result, // Base64-encoded file content for preview
         }));
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const Modal = ({ isOpen, onClose, imageSrc }) => {
-    if (!isOpen) return null;
-
-    return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <span className="close-preview" onClick={onClose}>
-            &times;
-          </span>
-          <img src={imageSrc} alt="Preview" className="full-size-image" />
-        </div>
-      </div>
-    );
   };
 
   const handleChange = (event) => {
@@ -206,6 +249,21 @@ const Registration = () => {
         }));
       }
     }
+  };
+
+  const Modal = ({ isOpen, onClose, imageSrc }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <span className="close-preview" onClick={onClose}>
+            &times;
+          </span>
+          <img src={imageSrc} alt="Preview" className="full-size-image" />
+        </div>
+      </div>
+    );
   };
 
   const handleAwardChange = (index, field, value) => {
@@ -289,7 +347,7 @@ const Registration = () => {
               />
               <button
                 type="button"
-                onClick={handleImageUpload}
+                onClick={() => fileUploadRef.current.click()}
                 className="upload-button"
               >
                 Upload Image
@@ -297,7 +355,7 @@ const Registration = () => {
               <input
                 type="file"
                 ref={fileUploadRef}
-                onChange={handleFileChange}
+                onChange={(e) => handleFileUpload(e, "avatarURL")}
                 accept="image/*"
                 style={{ display: "none" }}
               />
@@ -360,18 +418,18 @@ const Registration = () => {
                 <label>Sex:</label>
                 <RadioOption
                   id="female"
-                  name="sexValue"
+                  name="sex"
                   value="Female"
                   label="Female"
-                  checked={formData.sexValue === "Female"}
+                  checked={formData.sex === "Female"}
                   onChange={handleChange}
                 />
                 <RadioOption
                   id="male"
-                  name="sexValue"
+                  name="sex"
                   value="Male"
                   label="Male"
-                  checked={formData.sexValue === "Male"}
+                  checked={formData.sex === "Male"}
                   onChange={handleChange}
                 />
               </div>
@@ -549,7 +607,7 @@ const Registration = () => {
               <div className="info1-group">
                 <label>School Type:</label>
                 <RadioOption
-                  id="school_prublic"
+                  id="school_public"
                   name="school_type"
                   value="Public"
                   label="Public"
@@ -788,7 +846,7 @@ const Registration = () => {
                 </p>
                 <button
                   type="button"
-                  onClick={handleITRUpload}
+                  onClick={() => itrUploadRef.current.click()}
                   className="upload-button"
                 >
                   Upload Income Tax Return (ITR)
@@ -796,7 +854,7 @@ const Registration = () => {
                 <input
                   type="file"
                   ref={itrUploadRef}
-                  onChange={handleITRFileChange}
+                  onChange={(e) => handleFileUpload(e, "itrUrl")}
                   accept="application/pdf, image/*"
                   style={{ display: "none" }}
                 />
@@ -869,7 +927,7 @@ const Registration = () => {
                 </p>
                 <button
                   type="button"
-                  onClick={handleESignatureUpload}
+                  onClick={() => eSignatureUploadRef.current.click()}
                   className="upload-button"
                 >
                   Upload E-Signature
@@ -877,7 +935,7 @@ const Registration = () => {
                 <input
                   type="file"
                   ref={eSignatureUploadRef}
-                  onChange={handleESignatureFileChange}
+                  onChange={(e) => handleFileUpload(e, "eSignature")}
                   accept="application/pdf, image/*"
                   style={{ display: "none" }}
                 />
