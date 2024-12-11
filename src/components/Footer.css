@@ -4,7 +4,6 @@
   display: flex;
   flex-wrap: wrap; /* Ensures responsiveness for smaller screens */
   margin: 0 auto; /* Center footer horizontally */
-  padding: 20px;
   align-items: center; /* Aligns items vertically */
   justify-content: space-between; /* Distributes sections evenly */
 }

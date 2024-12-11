@@ -621,7 +621,10 @@ const Registration = () => {
                         />
                       </td>
                       <td>
-                        <button onClick={() => removeAwardRow(index)}>
+                        <button
+                          className="delete-row-btn"
+                          onClick={() => removeAwardRow(index)}
+                        >
                           Remove
                         </button>
                       </td>
@@ -629,7 +632,11 @@ const Registration = () => {
                   ))}
                 </tbody>
               </table>
-              <button onClick={addAwardRow} style={{ marginTop: "10px" }}>
+              <button
+                className="add-row-btn"
+                onClick={addAwardRow}
+                style={{ marginTop: "10px" }}
+              >
                 Add Row
               </button>
             </div>
