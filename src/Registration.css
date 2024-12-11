@@ -114,9 +114,9 @@ select {
   box-sizing: border-box;
 }
 
-input[type="file"] {
+/* input[type="file"] {
   display: none;
-}
+} */
 
 /* Buttons */
 .upload-button,

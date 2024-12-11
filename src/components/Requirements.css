@@ -1,72 +1,295 @@
-/* Overlay style to darken the background */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000; /* Ensures it appears above other elements */
+.application-header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: #f9f9f9;
+  border-bottom: 2px solid #444;
+  margin-bottom: 30px;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Container for the popup content */
-.popup-container {
-  background-color: #fff; /* White background for contrast */
-  width: 90%; /* Responsive width */
-  max-width: 600px; /* Max width for larger screens */
-  padding: 20px;
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  position: relative; /* For positioning the close button */
-  overflow-y: auto; /* Scrollable content if it exceeds the container */
-  max-height: 90vh; /* Ensures it doesn’t overflow the viewport height */
+.application-header h2 {
+  font-size: 28px; /* Larger font size for main titles */
+  margin: 15px 0;
+  color: #222; /* Slightly darker for better contrast */
+  font-weight: bold;
 }
 
-/* Title styling */
-.popup-container h2 {
-  font-size: 1.8em;
-  margin-bottom: 10px;
-  color: #0038a7; /* Matches the theme color */
+.application-header p {
+  font-size: 16px; /* Slightly larger for better readability */
+  margin: 5px 0;
+  color: #666;
+  font-style: italic; /* To differentiate additional info */
+}
+
+.application-header hr {
+  border: none;
+  border-top: 1px solid #444;
+  margin: 20px auto;
+  width: 70%; /* Wider for balance */
+  opacity: 0.8; /* Subtle appearance */
+}
+
+.form-container {
+  border-radius: 30px;
+  background-color: #f6f6f6;
+  margin: 20px;
+  padding: 20px 10px;
+  font-family: "Intern", sans-serif;
+}
+
+.form-container h3 {
   text-align: center;
 }
 
-/* Subtitle styling */
-.popup-container h3 {
-  font-size: 1.4em;
-  margin-bottom: 8px;
-  color: #0038a7;
+.left-right {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
 }
 
-/* List styling */
-.popup-container ul {
-  padding-left: 30px;
-  margin-bottom: 10px;
-  text-align: justify;
+.old_left,
+.old_right {
+  padding: 10px;
+  flex: 1;
 }
 
-.popup-container ul li {
-  margin-bottom: 10px;
-  line-height: 1.6;
-  color: #555; /* Dark gray for better readability */
-  list-style-type: upper-roman;
-  text-align: justify;
+.old_left {
+  flex: 3; /* Left section takes more space */
 }
 
-/* Close button styling */
-.close-button {
-  background-color: #4e4a3b; /* Theme color */
-  color: #fff; /* White text */
+.old_right {
+  flex: 1; /* Right section takes less space */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center align the content horizontally */
+  justify-content: flex-start; /* Align items to the top */
+  gap: 15px; /* Add spacing between stacked items */
+}
+
+.radio-options {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.radio-option input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.radio-option label {
+  font-size: 14px;
+  color: #333;
+}
+
+.upload-button {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   padding: 10px 20px;
-  font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin-top: 10px; /* Add some space above the button */
 }
 
-.close-button:hover {
-  background-color: #3a382d; /* Darker shade on hover */
+.upload-button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.avatar-image {
+  width: 150px; /* Set fixed width */
+  height: 150px;
+  object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
+.itr-image {
+  width: 50px; /* Set fixed width */
+  height: 50px;
+  object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
+.personal-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.name-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  text-align: center;
+}
+
+.name-group input {
+  width: 100%; /* Ensures the input spans its parent container */
+  padding: 0.5rem; /* Adds padding inside the input for better UX */
+  font-size: 1rem; /* Ensures readable text size */
+  box-sizing: border-box; /* Includes padding in width calculations */
+}
+
+.info1-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.new_left,
+.new_right {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+}
+
+.vertical-line {
+  width: 1px;
+  height: auto;
+  background-color: #000;
+  border: none;
+  margin: 0 20px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.full-size-image {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 30px;
+}
+
+.close-preview {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Awards Table */
+.awards-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.awards-table th,
+.awards-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #333;
+}
+
+.awards-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.awards-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.awards-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.awards-table input[type="text"],
+.awards-table input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.awards-table input[type="text"]:focus,
+.awards-table input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Add Row Button */
+.add-row-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: block;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-row-btn:hover {
+  background-color: #218838;
+}
+
+/* Delete Row Button */
+.delete-row-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-row-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-row-btn:focus {
+  outline: none;
+}
+
+.delete-row-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

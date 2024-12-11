@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./FinalReqPage.css";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ const FinalReqPage = () => {
           "You have been successfully logged out.",
           "success"
         ).then(() => {
-          navigate("/"); 
+          navigate("/");
         });
       }
     });
@@ -34,8 +34,8 @@ const FinalReqPage = () => {
   const [currentFileType, setCurrentFileType] = useState("");
 
   const handleUploadClick = (fileType) => {
-    setCurrentFileType(fileType); 
-    setShowPopup(true); 
+    setCurrentFileType(fileType);
+    setShowPopup(true);
   };
 
   const closePopup = () => {
@@ -49,7 +49,11 @@ const FinalReqPage = () => {
         ...prevFiles,
         [currentFileType]: file, // Store file by type
       }));
-      Swal.fire("File Selected", `File for ${currentFileType} has been added temporarily.`, "success");
+      Swal.fire(
+        "File Selected",
+        `File for ${currentFileType} has been added temporarily.`,
+        "success"
+      );
       closePopup();
     }
   };
@@ -81,21 +85,22 @@ const FinalReqPage = () => {
   const handleUpload = () => {
     //digdi mo lalagay pag kuha ng file
     //next update status
-    //next save sa db 
+    //next save sa db
     setShowPopup(false); // pang close popup
     Swal.fire({
       title: "File Uploaded",
       text: "File Successfully Uploded",
       icon: "success",
       confirmButtonText: "OK",
-    })
-
-  }
+    });
+  };
 
   return (
     <div className="application-page">
       <header className="lg-btn">
-        <button className="logout-button" onClick={handleLogout}>LOG OUT</button>
+        <button className="logout-button" onClick={handleLogout}>
+          LOG OUT
+        </button>
       </header>
       <div className="application-details">
         <h3>APPLICATION ID: 0N2WDWV037FBD</h3>
@@ -110,16 +115,17 @@ const FinalReqPage = () => {
         <h3>Requirements</h3>
         <table className="requirements-table">
           <thead>
-
             <tr>
               <th>Requirement</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-
             <tr>
-              <td>CERTIFIED TRUE COPY of BIRTH CERTIFICATE<p>STATUS: No file uploaded</p></td>
+              <td>
+                CERTIFIED TRUE COPY of BIRTH CERTIFICATE
+                <p>STATUS: No file uploaded</p>
+              </td>
               <td>
                 <button
                   onClick={() =>
@@ -155,7 +161,8 @@ const FinalReqPage = () => {
             <tr>
               <td>
                 ORIGINAL COMELEC Voter’s Certification of the applicant, if
-                minor, voter’s certification of parents/guardian<p>STATUS: No file uploaded</p>
+                minor, voter’s certification of parents/guardian
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
                 <button
@@ -170,8 +177,9 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-                CERTIFIED TRUE COPY of Report Card of Form 138; <br></br>CERTIFICATE of
-                Grades for college level<p>STATUS: No file uploaded</p>
+                CERTIFIED TRUE COPY of Report Card of Form 138; <br></br>
+                CERTIFICATE of Grades for college level
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
                 <button
@@ -186,15 +194,20 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-              CERTIFIED TRUE COPY of Good Moral Character signed by the principal for senior high school graduate,<br></br>
-              CERTIFIED TRUE COPY of Good Moral Character signed by the guidance counselor for college level,<br></br>
-              ORIGINAL certificate of Good Moral Character signed by the Punong Barangay for out of school youth,
-              <p>STATUS: No file uploaded</p>
+                CERTIFIED TRUE COPY of Good Moral Character signed by the
+                principal for senior high school graduate,<br></br>
+                CERTIFIED TRUE COPY of Good Moral Character signed by the
+                guidance counselor for college level,<br></br>
+                ORIGINAL certificate of Good Moral Character signed by the
+                Punong Barangay for out of school youth,
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
                 <button
                   onClick={() =>
-                    handleUploadClick("CERTIFIED TRUE COPY of Good Moral Character ")
+                    handleUploadClick(
+                      "CERTIFIED TRUE COPY of Good Moral Character "
+                    )
                   }
                 >
                   UPLOAD FILE
@@ -204,15 +217,19 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-              ORIGINAL certificate from PDAO for PWD or;<br></br>
-              ORIGINAL certificate from Municipal Agriculture Office for farmers or fisher folks children;<br></br>
-              ORIGINAL certificate from MSWDO for solo parent’s children; or solo parent applicant. 
-              <p>STATUS: No file uploaded</p>
+                ORIGINAL certificate from PDAO for PWD or;<br></br>
+                ORIGINAL certificate from Municipal Agriculture Office for
+                farmers or fisher folks children;<br></br>
+                ORIGINAL certificate from MSWDO for solo parent’s children; or
+                solo parent applicant.
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
-                <button 
+                <button
                   onClick={() =>
-                    handleUploadClick("ORIGINAL certificate of PDAO/Municipal Agriculture Office/MSWDO ")
+                    handleUploadClick(
+                      "ORIGINAL certificate of PDAO/Municipal Agriculture Office/MSWDO "
+                    )
                   }
                 >
                   UPLOAD FILE
@@ -222,13 +239,16 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-              Original or Certified true copy of enrollment/ registration form;
-              <p>STATUS: No file uploaded</p>
+                Original or Certified true copy of enrollment/ registration
+                form;
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
-                <button 
+                <button
                   onClick={() =>
-                    handleUploadClick("Original or Certified true copy of enrollment/ registration form")
+                    handleUploadClick(
+                      "Original or Certified true copy of enrollment/ registration form"
+                    )
                   }
                 >
                   UPLOAD FILE
@@ -238,13 +258,17 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-              Original or CERTIFIED TRUE COPY of certification from MSWDO that the qualified scholar belongs to the indigent family of the municipality;
-              <p>STATUS: No file uploaded</p>
+                Original or CERTIFIED TRUE COPY of certification from MSWDO that
+                the qualified scholar belongs to the indigent family of the
+                municipality;
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
-                <button 
+                <button
                   onClick={() =>
-                    handleUploadClick("Original or CERTIFIED TRUE COPY of certification from MSWDO")
+                    handleUploadClick(
+                      "Original or CERTIFIED TRUE COPY of certification from MSWDO"
+                    )
                   }
                 >
                   UPLOAD FILE
@@ -254,36 +278,42 @@ const FinalReqPage = () => {
 
             <tr>
               <td>
-              CERTIFICATION by the parents or guardians that the applicant is not enjoying any government or private scholarship grants. 
-              <p>STATUS: No file uploaded</p>
+                CERTIFICATION by the parents or guardians that the applicant is
+                not enjoying any government or private scholarship grants.
+                <p>STATUS: No file uploaded</p>
               </td>
               <td>
-                <button 
+                <button
                   onClick={() =>
-                    handleUploadClick("CERTIFICATION by the parents or guardians")
+                    handleUploadClick(
+                      "CERTIFICATION by the parents or guardians"
+                    )
                   }
                 >
                   UPLOAD FILE
                 </button>
               </td>
             </tr>
-
           </tbody>
         </table>
       </div>
 
-      <button className="submit-button" onClick={handleSubmitAll}>SUBMIT ALL</button>
+      <button className="submit-button" onClick={handleSubmitAll}>
+        SUBMIT ALL
+      </button>
 
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
             <h3>Upload File for: {currentFileType}</h3>
-            <input type="file" onChange={handleFileChange}/>
+            <input type="file" onChange={handleFileChange} />
             <div className="popup-buttons">
               <button onClick={closePopup} className="close-button">
                 Cancel
               </button>
-              <button className="close-button" onClick={handleUpload}>Upload</button>
+              <button className="close-button" onClick={handleUpload}>
+                Upload
+              </button>
             </div>
           </div>
         </div>
