@@ -7,6 +7,7 @@ from flask_cors import CORS
 import mysql.connector
 from datetime import datetime, date
 import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -114,6 +115,22 @@ def initialize_database():
             )
         """)
 
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS final_requirements (
+                final_requirements_id INT AUTO_INCREMENT PRIMARY KEY,
+                applicant_id VARCHAR(10),
+                last_name VARCHAR(100),
+                birth_cert_path VARCHAR(255),
+                report_card_path VARCHAR(255),
+                good_moral_path VARCHAR(255),
+                pdao_path VARCHAR(255),
+                reg_form_path VARCHAR(255),
+                indigent_family_path VARCHAR(255),
+                no_scholarship_path VARCHAR(255),
+                FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
+            )
+        """)
+
         conn.commit()
         cursor.close()
         conn.close()
@@ -133,21 +150,16 @@ def create_directory_structure():
         # Create the base folder if it doesn't exist
         if not os.path.exists(base_path):
             os.makedirs(base_path)
-            print(f"Created base folder: {base_path}")
 
         # Create the year folder if it doesn't exist
         if not os.path.exists(year_path):
             os.makedirs(year_path)
-            print(f"Created year folder: {year_path}")
 
         # Create each subfolder inside the year folder
         for folder in subfolders:
             folder_path = os.path.join(year_path, folder)
-            if not os.path.exists(folder_path):
-                os.makedirs(folder_path)
-                print(f"Created subfolder: {folder_path}")
+            os.makedirs(folder_path, exist_ok=True)
 
-        print("Folder structure created successfully!")
     except Exception as e:
         print(f"Error creating folder structure: {e}")
 
@@ -174,31 +186,28 @@ def save_file_to_folder(file, last_name, file_type):
         "Y-Z": "YZ"
     }
 
-    # Determine target folder based on last name's first letter
+    # Determine target subfolder based on last name's first letter
     last_name_initial = last_name[0].upper()
-    target_folder = None
+    target_subfolder = None
 
     for subfolder, letters in subfolders.items():
         if last_name_initial in letters:
-            target_folder = subfolder
+            target_subfolder = subfolder
             break
 
-    if target_folder is None:
+    if target_subfolder is None:
         raise ValueError("Invalid last name initial.")
 
-    # Full path to the target folder
-    target_folder_path = os.path.join(year_path, target_folder)
-
-    # Ensure the directory exists
+    # Create the directory structure
+    target_folder_path = os.path.join(year_path, target_subfolder, last_name, "Final Requirements")
     os.makedirs(target_folder_path, exist_ok=True)
 
-    # Save the file
-    file_name = f"{last_name}_{file_type}.png"  # Save as PNG (or other formats)
+    # Save the file in the "Final Requirements" folder
+    file_name = f"{file_type}_{secure_filename(file.filename)}"  # Prefix filename with its type
     file_path = os.path.join(target_folder_path, file_name)
     file.save(file_path)
 
     return file_path
-
 
 db_config['database'] = 'scholarship_db'
 
@@ -593,23 +602,56 @@ def submit_initial_requirements():
         return jsonify({"error": "An error occurred while processing the data."}), 500
 
 
-UPLOAD_FOLDER = 'static/uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 @app.route('/submit-all', methods=['POST'])
 def submit_all():
-    if not request.files:
-        return jsonify({"message": "No files uploaded"}), 400
+    try:
+        if not request.files or not request.form.get("last_name") or not request.form.get("applicant_id"):
+            return jsonify({"message": "No files or last name provided"}), 400
 
-    saved_files = []
-    for file_type, file in request.files.items():
-        filename = f"{file_type}_{file.filename}"  # Prefix filename with its type
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        saved_files.append(file_path)
+        last_name = request.form.get("last_name")
+        applicant_id = request.form.get("applicant_id")
+        saved_files = []
 
-    return jsonify({"message": "Files uploaded successfully", "files": saved_files}), 200
+        # Save each file to the appropriate folder and store the file paths
+        file_paths = {}
+        for file_type, file in request.files.items():
+            file_path = save_file_to_folder(file, last_name, file_type)
+            saved_files.append(file_path)
+            file_paths[file_type] = file_path
+        print(file_paths)
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # Insert the file paths into the database
+        insert_query = """
+            INSERT INTO final_requirements (applicant_id, last_name, birth_cert_path, report_card_path, 
+            good_moral_path, pdao_path, reg_form_path, indigent_family_path, no_scholarship_path) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(insert_query, (
+            applicant_id, last_name,
+            file_paths.get('birth_cert', ''),
+            file_paths.get('report_card', ''),
+            file_paths.get('good_moral', ''),
+            file_paths.get('pdao', ''),
+            file_paths.get('reg_form', ''),
+            file_paths.get('indigent_family', ''),
+            file_paths.get('no_scholarship', '')
+        ))
+        
+        # Commit the transaction
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+
+        return jsonify({"message": "Files uploaded and data saved successfully", "files": saved_files}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message": "Internal server error", "error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

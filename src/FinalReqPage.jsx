@@ -69,11 +69,19 @@ const FinalReqPage = () => {
       Swal.fire("Error", "No files uploaded to submit.", "error");
       return;
     }
+    const lastName = "Dizon";
+    const applicant_id = "20240001";
 
     const formData = new FormData();
+
+    // Add last name to the form data
+    formData.append("last_name", lastName);
+    formData.append("applicant_id", applicant_id);
+    // Add files to the form data
     for (const [fileType, file] of Object.entries(files)) {
       formData.append(fileType, file); // Add each file with its type as the key
     }
+
 
     // Send files to Flask
     axios
@@ -248,7 +256,7 @@ const FinalReqPage = () => {
                 <button
                   onClick={() =>
                     handleUploadClick(
-                      "ORIGINAL certificate of PDAO/Municipal Agriculture Office/MSWDO ",
+                      "ORIGINAL certificate of PDAO or Municipal Agriculture Office or MSWDO ",
                       6
                     )
                   }
@@ -268,7 +276,7 @@ const FinalReqPage = () => {
                 <button
                   onClick={() =>
                     handleUploadClick(
-                      "Original or Certified true copy of enrollment/ registration form",
+                      "Original or Certified true copy of enrollment or registration form",
                       7
                     )
                   }
