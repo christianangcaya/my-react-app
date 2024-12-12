@@ -120,13 +120,7 @@ def initialize_database():
                 final_requirements_id INT AUTO_INCREMENT PRIMARY KEY,
                 applicant_id VARCHAR(10),
                 last_name VARCHAR(100),
-                birth_cert_path VARCHAR(255),
-                report_card_path VARCHAR(255),
-                good_moral_path VARCHAR(255),
-                pdao_path VARCHAR(255),
-                reg_form_path VARCHAR(255),
-                indigent_family_path VARCHAR(255),
-                no_scholarship_path VARCHAR(255),
+                final_req_folder_path VARCHAR(255),
                 FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
             )
         """)
@@ -167,47 +161,6 @@ def create_directory_structure():
 initialize_database()
 create_directory_structure()
 
-
-def save_file_to_folder(file, last_name, file_type):
-    base_path = "C:/LGU Daet Scholarship"
-    year_folder = str(datetime.now().year)
-    year_path = os.path.join(base_path, year_folder)
-
-    # Subfolders based on alphabetical ranges
-    subfolders = {
-        "A-C": "ABC",
-        "D-F": "DEF",
-        "G-I": "GHI",
-        "J-L": "JKL",
-        "M-O": "MNO",
-        "P-R": "PQR",
-        "S-U": "STU",
-        "V-X": "VWX",
-        "Y-Z": "YZ"
-    }
-
-    # Determine target subfolder based on last name's first letter
-    last_name_initial = last_name[0].upper()
-    target_subfolder = None
-
-    for subfolder, letters in subfolders.items():
-        if last_name_initial in letters:
-            target_subfolder = subfolder
-            break
-
-    if target_subfolder is None:
-        raise ValueError("Invalid last name initial.")
-
-    # Create the directory structure
-    target_folder_path = os.path.join(year_path, target_subfolder, last_name, "Final Requirements")
-    os.makedirs(target_folder_path, exist_ok=True)
-
-    # Save the file in the "Final Requirements" folder
-    file_name = f"{file_type}_{secure_filename(file.filename)}"  # Prefix filename with its type
-    file_path = os.path.join(target_folder_path, file_name)
-    file.save(file_path)
-
-    return file_path
 
 db_config['database'] = 'scholarship_db'
 
@@ -292,11 +245,9 @@ def register_user():
         birthdate_str = data.get('birthday')  # Birthdate is a string in 'YYYY-MM-DD' format
         email_address = data.get('email')
 
-        # Check if birthdate is provided
         if not birthdate_str:
             return jsonify({"error": "Birthdate is required"}), 400
 
-        # Validate names
         if not validate_name(surname):
             return jsonify({"error": "Surname must contain only alphabets"}), 400
         if not validate_name(first_name):
@@ -304,7 +255,6 @@ def register_user():
         if middle_name and not validate_name(middle_name):
             return jsonify({"error": "Middle name must contain only alphabets"}), 400
 
-        # Validate birthdate format and age
         birthdate = None
         try:
             birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d').date()
@@ -333,14 +283,23 @@ def register_user():
         cursor.close()
         conn.close()
 
-        # Send the application ID to the applicant's email
         send_email(email_address, application_id, first_name, surname)
 
-        return jsonify({"message": "User registered successfully!", "application_id": application_id}), 201
+        return jsonify({
+            "message": "User registered successfully!",
+            "application_id": application_id,
+            "surname": surname,
+            "first_name": first_name,
+            "middle_name": middle_name,
+            "suffix_name": suffix_name,
+            "birthdate": birthdate_str,
+            "email_address": email_address
+        }), 201
     except mysql.connector.IntegrityError:
         return jsonify({"error": "Email address already exists!"}), 409
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/submit_initial_requirements', methods=['POST'])
 def submit_initial_requirements():
@@ -612,45 +571,56 @@ def submit_all():
         applicant_id = request.form.get("applicant_id")
         saved_files = []
 
-        # Save each file to the appropriate folder and store the file paths
+        current_year = str(datetime.now().year)
+        first_letter = last_name[0].upper()
+        if 'A' <= first_letter <= 'C':
+            folder_range = "A-C"
+        elif 'D' <= first_letter <= 'F':
+            folder_range = "D-F"
+        elif 'G' <= first_letter <= 'I':
+            folder_range = "G-I"
+        elif 'J' <= first_letter <= 'L':
+            folder_range = "J-L"
+        elif 'M' <= first_letter <= 'O':
+            folder_range = "M-O"
+        elif 'P' <= first_letter <= 'R':
+            folder_range = "P-R"
+        elif 'S' <= first_letter <= 'U':
+            folder_range = "S-U"
+        elif 'V' <= first_letter <= 'Z':
+            folder_range = "V-Z"
+        else:
+            folder_range = "Other"
+        
+        final_req_folder_path = f"C:/LGU Daet Scholarship\\{current_year}\\{folder_range}\\{last_name}\\Final Requirements\\"
+        os.makedirs(final_req_folder_path, exist_ok=True)
+
         file_paths = {}
         for file_type, file in request.files.items():
-            file_path = save_file_to_folder(file, last_name, file_type)
+            file_path = os.path.join(final_req_folder_path, f"{file_type}_{file.filename}")
+            file.save(file_path)
             saved_files.append(file_path)
             file_paths[file_type] = file_path
-        print(file_paths)
+
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
-        # Insert the file paths into the database
         insert_query = """
-            INSERT INTO final_requirements (applicant_id, last_name, birth_cert_path, report_card_path, 
-            good_moral_path, pdao_path, reg_form_path, indigent_family_path, no_scholarship_path) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO final_requirements (applicant_id, last_name, final_req_folder_path) 
+            VALUES (%s, %s, %s)
         """
+        cursor.execute(insert_query, (applicant_id, last_name, final_req_folder_path))
 
-        cursor.execute(insert_query, (
-            applicant_id, last_name,
-            file_paths.get('birth_cert', ''),
-            file_paths.get('report_card', ''),
-            file_paths.get('good_moral', ''),
-            file_paths.get('pdao', ''),
-            file_paths.get('reg_form', ''),
-            file_paths.get('indigent_family', ''),
-            file_paths.get('no_scholarship', '')
-        ))
-        
-        # Commit the transaction
         conn.commit()
         cursor.close()
         conn.close()
-
 
         return jsonify({"message": "Files uploaded and data saved successfully", "files": saved_files}), 200
 
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+
 
 
 if __name__ == '__main__':
