@@ -1,12 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Registration.css";
 import DefaultImage from "./assets/pfp_placeholder.png";
 import PreviewIcon from "./assets/itr_preview.png";
 
 // Reusable input component
-const InputField = ({ id, label, name, type = "text", value, onChange }) => (
+const InputField = ({ id, label, name, type = "text", value, onChange, disabled }) => (
   <div className="name-group">
-    <input type={type} id={id} name={name} value={value} onChange={onChange} />
+    <input type={type} id={id} name={name} value={value} onChange={onChange} disabled={disabled}/>
     <label htmlFor={id}>{label}</label>
   </div>
 );
@@ -49,8 +49,11 @@ const gradeYearOptions = {
   als: ["N/A"],
 };
 
+
 const Registration = () => {
+
   const [formData, setFormData] = useState({
+
     avatarURL: DefaultImage,
     grant_type: "",
     sex: "",
@@ -94,6 +97,35 @@ const Registration = () => {
     partner_course: "",
     eSignature: PreviewIcon,
   });
+
+  useEffect(() => {
+    // Fetch data from Flask backend
+    fetch("http://127.0.0.1:5000/api/data") // Replace with the actual Flask endpoint
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Transform and update formData with fetched data
+        setFormData((prevData) => ({
+          ...prevData,
+          name: {
+            lastName: data.surname,
+            firstName: data.first_name,
+            middleName: data.middle_name,
+            suffix: data.suffix_name,
+          },
+          birthdate: data.birthdate,
+          email_address: data.email_address,
+          applicant_id: data.application_id,
+
+        }));
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
   const [awards, setAwards] = useState([
     { description: "", school: "", date: "" },
   ]);
@@ -373,6 +405,8 @@ const Registration = () => {
                 name="applicant_id"
                 value={formData.applicant_id}
                 onChange={handleChange}
+                disabled={true}
+                
               />
               <InputField
                 id="lname"
@@ -380,6 +414,7 @@ const Registration = () => {
                 name="name.lastName"
                 value={formData.name.lastName}
                 onChange={handleChange}
+                disabled={true}
               />
               <InputField
                 id="fname"
@@ -387,6 +422,7 @@ const Registration = () => {
                 name="name.firstName"
                 value={formData.name.firstName}
                 onChange={handleChange}
+                disabled={true}
               />
               <InputField
                 id="mname"
@@ -394,6 +430,7 @@ const Registration = () => {
                 name="name.middleName"
                 value={formData.name.middleName}
                 onChange={handleChange}
+                disabled={true}
               />
               <InputField
                 id="suffix"
@@ -401,6 +438,7 @@ const Registration = () => {
                 name="name.suffix"
                 value={formData.name.suffix}
                 onChange={handleChange}
+                disabled={true}
               />
             </div>
 
@@ -468,6 +506,7 @@ const Registration = () => {
                 type="date"
                 value={formData.birthdate}
                 onChange={handleChange}
+                disabled={true}
               />
               <InputField
                 id="place_of_birth"
@@ -528,6 +567,7 @@ const Registration = () => {
                 type="email"
                 value={formData.email_address}
                 onChange={handleChange}
+                disabled={true}
               />
             </div>
 

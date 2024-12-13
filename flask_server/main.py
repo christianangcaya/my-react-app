@@ -301,6 +301,20 @@ def register_user():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    data = {
+        "application_id": "1313878471",
+        "surname": "Abdula",
+        "first_name": "Abnero",
+        "middle_name": "Saturnino",
+        "suffix_name": "Jr.",
+        "birthdate": "2000-01-01",
+        "email_address": "johnnySins6969@example.com"
+    }
+    return jsonify(data)
+
+
 @app.route('/submit_initial_requirements', methods=['POST'])
 def submit_initial_requirements():
     try:
