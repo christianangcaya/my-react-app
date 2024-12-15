@@ -72,10 +72,19 @@ def initialize_database():
                 gwa DECIMAL(5, 2) NOT NULL,
                 school_name VARCHAR(150) NOT NULL,
                 school_type ENUM('Public', 'Private') NOT NULL,
-                awards_description VARCHAR(255),
-                award_from VARCHAR(150)
-                award_date DATE,
                 FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
+                    ON DELETE CASCADE
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS af_educ_info_awards (
+                awards_id INT AUTO_INCREMENT PRIMARY KEY,
+                educ_info_id INT,
+                awards_description VARCHAR(255),
+                award_from VARCHAR(150),
+                award_date DATE,
+                FOREIGN KEY (educ_info_id) REFERENCES af_educ_info(educ_info_id)
                     ON DELETE CASCADE
             )
         """)
