@@ -5,6 +5,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const FinalReqPage = () => {
+  const [colors, setColors] = useState({ 
+    p1: 'red',
+    p2: 'red',
+    p3: 'red',
+    p4: 'red',
+    p5: 'red',
+    p6: 'red',
+    p7: 'red',
+    p8: 'red',
+    p9: 'red' });
+
   const navigate = useNavigate();
   const [files, setFiles] = useState({});
   const [status, setStatus] = useState({
@@ -81,6 +92,7 @@ const FinalReqPage = () => {
       "ORIGINAL certificate of PDAO or Municipal Agriculture Office or MSWDO ",
       "Original or Certified true copy of enrollment or registration form",
       "Original or CERTIFIED TRUE COPY of certification from MSWDO",
+      "CERTIFICATION by the parents or guardians",
     ];
 
     const missingFiles = requiredFiles.filter((fileType) => !files[fileType]);
@@ -119,15 +131,18 @@ const FinalReqPage = () => {
       });
   };
 
-  const handleUpload = (id) => {
+  // const handleColors = (id) => { setColors((prevColors) => ({ ...prevColors, [id]: prevColors[id] === 'red' ? 'green' : 'red' }));}
+  const handleUpload = () => {
     if (files[currentFileType]) {
-      setShowPopup(false);
+      setShowPopup(false); // Close popup
       Swal.fire({
         title: "File Uploaded",
         text: `File for ${currentFileType} successfully uploaded.`,
         icon: "success",
         confirmButtonText: "OK",
       }).then(() => {
+        // Update colors and statuses using the correct ID
+        setColors((prevColors) => ({ ...prevColors, [`p${showPopup}`]: 'green' }));
         setStatus((prevStatuses) => ({
           ...prevStatuses,
           [showPopup]: "File uploaded successfully",
@@ -138,6 +153,7 @@ const FinalReqPage = () => {
       Swal.fire("Error", "Please select a file before uploading.", "error");
     }
   };
+  
 
   return (
     <div className="application-page">
@@ -172,7 +188,7 @@ const FinalReqPage = () => {
             <tr>
               <td>
                 CERTIFIED TRUE COPY of BIRTH CERTIFICATE
-                <p id="1">STATUS: {status[1]}</p>
+                <p id="1" style={{color: colors.p1}}>STATUS: {status[1]}</p>
               </td>
               <td>
                 <button
@@ -192,7 +208,7 @@ const FinalReqPage = () => {
               <td>
                 ORIGINAL CERTIFICATION from Punong Barangay that the applicant
                 is a bona fide indigent resident of their barangay
-                <p id="2">STATUS:{status[2]}</p>
+                <p id="2"  style={{color: colors.p2}}>STATUS:{status[2]}</p>
               </td>
               <td>
                 <button
@@ -212,7 +228,7 @@ const FinalReqPage = () => {
               <td>
                 ORIGINAL COMELEC Voter’s Certification of the applicant, if
                 minor, voter’s certification of parents/guardian
-                <p id="3">STATUS:{status[3]}</p>
+                <p id="3"  style={{color: colors.p3}}>STATUS:{status[3]}</p>
               </td>
               <td>
                 <button
@@ -232,7 +248,7 @@ const FinalReqPage = () => {
               <td>
                 CERTIFIED TRUE COPY of Report Card of Form 138; <br></br>
                 CERTIFICATE of Grades for college level
-                <p id="4">STATUS:{status[4]}</p>
+                <p id="4"  style={{color: colors.p4}}>STATUS:{status[4]}</p>
               </td>
               <td>
                 <button
@@ -253,7 +269,7 @@ const FinalReqPage = () => {
                 guidance counselor for college level,<br></br>
                 ORIGINAL certificate of Good Moral Character signed by the
                 Punong Barangay for out of school youth,
-                <p id="5">STATUS:{status[5]}</p>
+                <p id="5"  style={{color: colors.p5}}>STATUS:{status[5]}</p>
               </td>
               <td>
                 <button
@@ -276,7 +292,7 @@ const FinalReqPage = () => {
                 farmers or fisher folks children;<br></br>
                 ORIGINAL certificate from MSWDO for solo parent’s children; or
                 solo parent applicant.
-                <p id="6">STATUS:{status[6]}</p>
+                <p id="6"  style={{color: colors.p6}}>STATUS:{status[6]}</p>
               </td>
               <td>
                 <button
@@ -296,7 +312,7 @@ const FinalReqPage = () => {
               <td>
                 Original or Certified true copy of enrollment/ registration
                 form;
-                <p id="7">STATUS:{status[7]}</p>
+                <p id="7"  style={{color: colors.p7}}>STATUS:{status[7]}</p>
               </td>
               <td>
                 <button
@@ -317,7 +333,7 @@ const FinalReqPage = () => {
                 Original or CERTIFIED TRUE COPY of certification from MSWDO that
                 the qualified scholar belongs to the indigent family of the
                 municipality;
-                <p id="8">STATUS:{status[8]}</p>
+                <p id="8"  style={{color: colors.p8}}>STATUS:{status[8]}</p>
               </td>
               <td>
                 <button
@@ -337,7 +353,7 @@ const FinalReqPage = () => {
               <td>
                 CERTIFICATION by the parents or guardians that the applicant is
                 not enjoying any government or private scholarship grants.
-                <p id="9">STATUS:{status[9]}</p>
+                <p id="9"  style={{color: colors.p9}}>STATUS:{status[9]}</p>
               </td>
               <td>
                 <button
