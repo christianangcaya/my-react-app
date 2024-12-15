@@ -667,6 +667,8 @@ def login():
             application_id, surname, first_name, birthdate, status = user_data
 
             if status == 'scholar':
+                print(f"Login successful for {first_name} {surname} (Application ID: {application_id}) {birthdate}")
+
                 return jsonify({
                     "success": True,
                     "message": "Login successful",

@@ -31,10 +31,17 @@ const LoginPopup = ({ onClose }) => {
       const result = await response.json();
   
       if (result.success) {
-        // Store the user data (You could use context or state management here)
-        localStorage.setItem("userData", JSON.stringify(result.data));
+        const birthdate = new Date(result.data.birthdate);
+        const formattedBirthdate = birthdate.toLocaleDateString('en-US', {
+          month: 'long',   // Full month name
+          day: 'numeric',  // Day of the month
+          year: 'numeric', // Full year
+        });
+
+        // Store the user data with the formatted birthdate
+        const userData = { ...result.data, birthdate: formattedBirthdate };
+        localStorage.setItem("userData", JSON.stringify(userData));
   
-        // Trigger the success popup and redirect
         onClose();
         Swal.fire({
           title: "Log In Successful",
