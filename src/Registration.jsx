@@ -252,10 +252,16 @@ const Registration = () => {
     uploadData.append("school_name", formData.school_name);
     uploadData.append("school_type", formData.school_type);
 
-    // Awards (assuming it's an array, you may need to handle it differently)
     formData.awards.forEach((award, index) => {
-      uploadData.append(`awards[${index}]`, award);
+      if (award.description || award.school || award.date) {
+        uploadData.append(`awards[${index}][description]`, award.description);
+        uploadData.append(`awards[${index}][school]`, award.school);
+        uploadData.append(`awards[${index}][date]`, award.date);
+      }
     });
+
+    // Or serialize the entire awards list as a JSON string:
+    uploadData.append("awards", JSON.stringify(formData.awards));
 
     uploadData.append("father_status", formData.father_status);
     uploadData.append("father_name", formData.father_name);

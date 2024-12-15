@@ -8,6 +8,7 @@ import mysql.connector
 from datetime import datetime, date
 import os
 from werkzeug.utils import secure_filename
+import json
 
 app = Flask(__name__)
 
@@ -375,6 +376,10 @@ def save_file_to_folder(file, last_name, id, file_type):
 @app.route('/submit_initial_requirements', methods=['POST'])
 def submit_initial_requirements():
     try:
+        # print("Awards Data:")
+        # for key, value in request.form.items():
+        #     print(f"{key}: {value}")
+        
         #Basic Info
         applicant_id = request.form.get("applicant_id")
         last_name = request.form.get("lastName", "")
@@ -401,9 +406,9 @@ def submit_initial_requirements():
         gwa = request.form.get("gwa")
         school_name = request.form.get("school_name")
         school_type = request.form.get("school_type")
-        awards = request.form.get("awards", [])
-
-        awards_string = ', '.join([f"{award['description']} - {award['school']} - {award['date']}" for award in awards])
+        # Get awards data from request
+        awards_json = request.form.get("awards", "[]")  # Default to an empty JSON array
+        awards = json.loads(awards_json)  # Parse JSON string into Python list
 
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
@@ -512,39 +517,68 @@ def submit_initial_requirements():
 
         #Educ Info Query
         educ_info_query = """
-            INSERT INTO af_educ_info (
-                applicant_id,
-                grant_type,
-                educ_attainment,
-                highest_grade_year,
-                gwa,
-                school_name,
-                school_type,
-                awards
+        INSERT INTO af_educ_info (
+            applicant_id,
+            grant_type,
+            educ_attainment,
+            highest_grade_year,
+            gwa,
+            school_name,
+            school_type
             ) VALUES (
-                %(applicant_id)s,
-                %(grant_type)s,
-                %(educ_attainment)s,
-                %(highest_grade_year)s,
-                %(gwa)s,
-                %(school_name)s,
-                %(school_type)s,
-                %(awards)s
+            %(applicant_id)s,
+            %(grant_type)s,
+            %(educ_attainment)s,
+            %(highest_grade_year)s,
+            %(gwa)s,
+            %(school_name)s,
+            %(school_type)s
             )
         """
-
         educ_info_params = {
             "applicant_id": applicant_id,
             "grant_type": grant_type,
-            'educ_attainment': educ_attainment,
-            'highest_grade_year': highest_grade_year,
-            'gwa': gwa,
-            'school_name': school_name,
-            'school_type': school_type,
-            'awards': awards_string
+            "educ_attainment": educ_attainment,
+            "highest_grade_year": highest_grade_year,
+            "gwa": gwa,
+            "school_name": school_name,
+            "school_type": school_type
         }
-        
         cursor.execute(educ_info_query, educ_info_params)
+        # Get the generated educ_info_id
+        educ_info_id = cursor.lastrowid
+            
+        # Insert awards into af_educ_info_awards
+        award_query = """
+        INSERT INTO af_educ_info_awards (
+        educ_info_id,
+        awards_description,
+        award_from,
+        award_date
+        ) VALUES (
+        %(educ_info_id)s,
+        %(awards_description)s,
+        %(award_from)s,
+        %(award_date)s
+        )
+        """
+        # Check if awards list is not empty
+        if awards:
+            for award in awards:
+                try:
+                    # Parse the award date
+                    award_date = datetime.strptime(award['date'], '%Y-%m-%d').date() if award.get('date') else None
+                    # Prepare parameters
+                    award_params = {
+                        "educ_info_id": educ_info_id,  # Ensure educ_info_id is retrieved earlier
+                        "awards_description": award.get('description'),
+                        "award_from": award.get('school'),
+                        "award_date": award_date
+                    }
+                    # Execute the SQL query
+                    cursor.execute(award_query, award_params)
+                except Exception as e:
+                    print(f"Error inserting award: {e}")
 
         #Family Info Query
         family_info_query = """
@@ -615,7 +649,7 @@ def submit_initial_requirements():
             VALUES (%s, %s, %s, %s)
         """, (applicant_id, photo_path, itr_path, e_signature_path))
 
-        # conn.commit()
+        conn.commit()
         cursor.close()
         conn.close()
 
