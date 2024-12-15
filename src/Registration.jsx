@@ -359,7 +359,8 @@ const Registration = () => {
 
   return (
     <>
-      <div className="application-header">
+      <form onSubmit={handleSubmit}>
+        <div className="application-header">
           <h2>DAET EXPANDED SCHOLARSHIP PROGRAM</h2>
           <p>(Per Municipal Ordinance No. 372 S. 2018)</p>
           <br />
@@ -1020,7 +1021,7 @@ const Registration = () => {
         <div className="submit-container">
           <button
             type="submit"
-            onClick={handleSubmit() => console.log("formData:", formData)}
+            onClick={() => console.log("formData:", formData)}
             className="submit-btn"
           >
             Submit
@@ -1033,6 +1034,7 @@ const Registration = () => {
             imageSrc={selectedImage}
           />
         </>
+      </form>
     </>
   );
 };
