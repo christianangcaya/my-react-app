@@ -135,6 +135,28 @@ const Registration = () => {
           const formattedBirthdate = new Date(matchingData.birthdate)
             .toISOString()
             .split("T")[0];
+
+          // Calculate age
+          const calculateAge = (birthdate) => {
+            const birthDate = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            const dayDifference = today.getDate() - birthDate.getDate();
+
+            // Adjust age if birthday hasn't occurred this year yet
+            if (
+              monthDifference < 0 ||
+              (monthDifference === 0 && dayDifference < 0)
+            ) {
+              age--;
+            }
+
+            return age;
+          };
+
+          const age = calculateAge(matchingData.birthdate);
+
           setFormData((prevData) => ({
             ...prevData,
             name: {
@@ -144,6 +166,7 @@ const Registration = () => {
               suffix: matchingData.suffix_name || "",
             },
             birthdate: formattedBirthdate || "",
+            age: age || "",
             email_address: matchingData.email_address || "",
             applicant_id: matchingData.application_id || "",
           }));
@@ -400,6 +423,7 @@ const Registration = () => {
         <hr style={{ border: "1px solid #000", marginTop: "10px" }} />
       </div>
       <div className="form-container">
+        <h3>Application ID: {formData.applicant_id}</h3>
         <div className="left-right">
           {/* Grant Applied For */}
           <div className="old_left">
@@ -468,14 +492,6 @@ const Registration = () => {
           <div className="personal-info">
             <p>Name:</p>
             <InputField
-              id="app_id"
-              label="Applicant ID"
-              name="applicant_id"
-              value={formData.applicant_id}
-              onChange={handleChange}
-              disabled={true}
-            />
-            <InputField
               id="lname"
               label="Last Name"
               name="name.lastName"
@@ -518,6 +534,7 @@ const Registration = () => {
               type="number"
               value={formData.age}
               onChange={handleChange}
+              disabled={true}
             />
             <div className="info1-group">
               <label>Sex:</label>
