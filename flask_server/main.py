@@ -328,8 +328,36 @@ def get_data():
 def save_file_to_folder(file, last_name, file_type):
     # Logic to save the file and return the file path
     filename = f"{last_name}_{file_type}.png"  # Example, customize as needed
-    file_path = f"C:/LGU Daet Scholarship\\{filename}"
-    file.save(file_path)  # Save the file to disk
+    first_letter = last_name[0].upper() if last_name else "Other"
+
+    if 'A' <= first_letter <= 'C':
+        folder_range = "A-C"
+    elif 'D' <= first_letter <= 'F':
+        folder_range = "D-F"
+    elif 'G' <= first_letter <= 'I':
+        folder_range = "G-I"
+    elif 'J' <= first_letter <= 'L':
+        folder_range = "J-L"
+    elif 'M' <= first_letter <= 'O':
+        folder_range = "M-O"
+    elif 'P' <= first_letter <= 'R':
+        folder_range = "P-R"
+    elif 'S' <= first_letter <= 'U':
+        folder_range = "S-U"
+    elif 'V' <= first_letter <= 'Z':
+        folder_range = "V-Z"
+    else:
+        folder_range = "Other"
+
+    current_year = str(datetime.now().year)
+
+    file_path = os.path.join(
+        f"C:/LGU Daet Scholarship/{current_year}/{folder_range}/{last_name}/Initial Requirements/{filename}"
+    )
+
+    os.makedirs(file_path, exist_ok=True)
+    
+    file.save(file_path)
     return file_path
 
 @app.route('/submit_initial_requirements', methods=['POST'])
