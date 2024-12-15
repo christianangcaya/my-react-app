@@ -365,22 +365,20 @@ def submit_initial_requirements():
     try:
         #Basic Info
         applicant_id = request.form.get("applicant_id")
-        name = request.form.get("name", {})
-        last_name = name.get("lastName", "")
-        first_name = name.get("firstName", "")
-        middle_name = name.get("middleName", "") or None
-        suffix = name.get("suffix", "") or None
+        last_name = request.form.get("lastName", "")
+        first_name = request.form.get("firstName", "")
+        middle_name = request.form.get("middleName", "") or None
+        suffix = request.form.get("suffix", "") or None
         age = request.form.get("age")
         religion = request.form.get("religion")
         sex = request.form.get("sex")
         civil_status = request.form.get("civilStatus")
         birthdate = request.form.get("birthdate")
         place_of_birth = request.form.get("place_of_birth")
-        permanent_address = request.form.get("permanent_address", {})
-        barangay = permanent_address.get("barangay", "")
-        purok = permanent_address.get("purok", "")
-        street = permanent_address.get("street", "") or None
-        municipality = permanent_address.get("municipality", "")
+        barangay = request.form.get("barangay", "")
+        purok = request.form.get("purok", "")
+        street = request.form.get("street", "") or None
+        municipality = request.form.get("municipality", "")
         contact_number = request.form.get("contact_number")
         email_address = request.form.get("email_address")
 
@@ -605,7 +603,7 @@ def submit_initial_requirements():
             VALUES (%s, %s, %s, %s)
         """, (applicant_id, photo_path, itr_path, e_signature_path))
 
-        conn.commit()
+        # conn.commit()
         cursor.close()
         conn.close()
 
