@@ -25,9 +25,6 @@ const Header = () => {
             <Link to="/faqs">FAQs</Link>
           </li>
           <li>
-            <Link to="/user">
-              <img src="user-icon.png" alt="User Icon" className="user-icon" />
-            </Link>
           </li>
         </ul>
       </nav>

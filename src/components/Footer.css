@@ -31,6 +31,12 @@
   margin-bottom: 10px; /* Adds space between list items */
 }
 
+.section1 a {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
 .section1 img {
   width: 25px; /* Adjust icon size */
   height: 25px;

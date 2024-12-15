@@ -11,29 +11,29 @@ const Footer = () => {
       <div className="section1">
         <p>Contact Us:</p>
         <ul>
-          <li>
+          <a href="https://www.facebook.com/profile.php?id=100067135762198">
             {" "}
             <span>
               <img src={fbimage}></img>
             </span>
             Lgu-Daet Expanded Scholarship Program
-          </li>
-          <li>
+          </a>
+          <a>
             {" "}
             <span>
               <img src={emailimage}></img>
             </span>
             Email: lgudaetsprogram@gmail.com
-          </li>
-          <li>
+          </a>
+          <a>
             {" "}
             <span>
               <img src={phoneimage}></img>
             </span>
             Phone: 524-565-8653
-          </li>
+          </a>
         </ul>
-      </div>
+      </div>s
       <div className="section2">
         <img src={footerimage} alt="Footer Logo" />
       </div>

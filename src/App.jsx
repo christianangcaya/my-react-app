@@ -58,10 +58,6 @@ const App = () => {
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/finalreq" element={<FinalReqPage/>}></Route>
-          <Route
-            path="/user"
-            element={<div>User Profile Page Coming Soon</div>}
-          />
         </Routes>
         <Footer />
       </Router>
