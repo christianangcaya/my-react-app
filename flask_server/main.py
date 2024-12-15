@@ -72,7 +72,9 @@ def initialize_database():
                 gwa DECIMAL(5, 2) NOT NULL,
                 school_name VARCHAR(150) NOT NULL,
                 school_type ENUM('Public', 'Private') NOT NULL,
-                awards TEXT,
+                awards_description VARCHAR(255),
+                award_from VARCHAR(150)
+                award_date DATE,
                 FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
                     ON DELETE CASCADE
             )
