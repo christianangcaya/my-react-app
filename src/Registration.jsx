@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import "./Registration.css";
 import DefaultImage from "./assets/pfp_placeholder.png";
 import PreviewIcon from "./assets/itr_preview.png";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 // Reusable input component
 const InputField = ({
@@ -173,15 +175,42 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate required files
+    const requiredFiles = ["avatarURL", "itrUrl", "eSignature"];
+
+    const missingFiles = requiredFiles.filter((fileType) => {
+      if (fileType === "avatarURL") return formData[fileType] === DefaultImage;
+      if (fileType === "itrUrl" || fileType === "eSignature")
+        return formData[fileType] === PreviewIcon;
+      return !formData[fileType];
+    });
+
+    if (missingFiles.length > 0) {
+      Swal.fire({
+        title: "Missing Files",
+        html: `
+          <p>The following files are missing:</p>
+          <ul style="text-align: left;">
+            ${missingFiles.map((file) => `<li>${file}</li>`).join("")}
+          </ul>
+          <p>Please upload them before submitting.</p>
+        `,
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
     console.log("formData:", formData);
     const uploadData = new FormData();
 
     // Add files to FormData
     if (formData.avatarURL !== DefaultImage) {
       uploadData.append(
-        "avatar",
+        "profile_image",
         dataURItoBlob(formData.avatarURL),
-        "avatar.png"
+        "profile.png"
       );
     }
     if (formData.itrUrl !== PreviewIcon) {
@@ -248,29 +277,27 @@ const Registration = () => {
     uploadData.append("partner_occupation", formData.partner_occupation);
     uploadData.append("partner_course", formData.partner_course);
 
-    for (let [key, value] of uploadData.entries()) {
-      console.log(`${key}:`, value);
-    }
-    try {
-      const response = await fetch(
-        "http://localhost:5000/submit_initial_requirements",
-        {
-          method: "POST",
-          body: uploadData,
-        }
-      );
-
-      const result = await response.json();
-      if (response.ok) {
-        alert("Form submitted successfully!");
-        console.log(result);
-      } else {
-        alert(`Submission failed: ${result.error}`);
-      }
-    } catch (error) {
-      console.error("Error during submission:", error);
-      alert("An error occurred during the submission. Please try again.");
-    }
+    axios
+      .post("http://localhost:5000/submit_initial_requirements", uploadData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        Swal.fire({
+          title: "Success!",
+          text: "Your form has been submitted successfully. Thank you!",
+          icon: "success",
+          confirmButtonText: "Great!",
+          timer: 3000, // Auto-close after 3 seconds
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Submission Failed",
+          text: "Oops! Something went wrong while submitting the form. Please try again later.",
+          icon: "error",
+          confirmButtonText: "Retry",
+        });
+      });
   };
 
   // Utility to convert Data URL to Blob
