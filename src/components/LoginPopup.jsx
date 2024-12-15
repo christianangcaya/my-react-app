@@ -53,6 +53,7 @@ const LoginPopup = ({ onClose }) => {
         });
       } else {
         // Handle login failure
+        onClose();
         Swal.fire({
           title: "Login Failed",
           text: result.message,
