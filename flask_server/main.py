@@ -72,8 +72,19 @@ def initialize_database():
                 gwa DECIMAL(5, 2) NOT NULL,
                 school_name VARCHAR(150) NOT NULL,
                 school_type ENUM('Public', 'Private') NOT NULL,
-                awards TEXT,
                 FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
+                    ON DELETE CASCADE
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS af_educ_info_awards (
+                awards_id INT AUTO_INCREMENT PRIMARY KEY,
+                educ_info_id INT,
+                awards_description VARCHAR(255),
+                award_from VARCHAR(150),
+                award_date DATE,
+                FOREIGN KEY (educ_info_id) REFERENCES af_educ_info(educ_info_id)
                     ON DELETE CASCADE
             )
         """)
@@ -647,7 +658,7 @@ def submit_all():
         else:
             folder_range = "Other"
         
-        final_req_folder_path = f"C:/LGU Daet Scholarship\\{current_year}\\{folder_range}\\{last_name}\\Final Requirements\\"
+        final_req_folder_path = f"C:/LGU Daet Scholarship\\{current_year}\\{folder_range}\\{last_name} {application_id}\\Final Requirements\\"
         os.makedirs(final_req_folder_path, exist_ok=True)
 
         file_paths = {}
