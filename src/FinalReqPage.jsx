@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./FinalReqPage.css";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,19 @@ const FinalReqPage = () => {
     7: "No file uploaded",
     8: "No file uploaded",
     9: "No file uploaded",
+  });
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("userData"));
+    setUserData(data);
+  }, []);
+
+  const formattedBirthdate = new Date(userData.birthdate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit'
   });
 
   const handleLogout = () => {
@@ -65,36 +78,52 @@ const FinalReqPage = () => {
   };
 
   const handleSubmitAll = () => {
-    if (Object.keys(files).length === 0) {
-      Swal.fire("Error", "No files uploaded to submit.", "error");
-      return;
-    }
-    const lastName = "Dizon";
-    const applicant_id = "20240001";
+  const requiredFiles = [
+    "CERTIFIED TRUE COPY of BIRTH CERTIFICATE",
+    "ORIGINAL CERTIFICATION from Punong Barangay",
+    "ORIGINAL COMELEC Voter’s Certification",
+    "CERTIFIED TRUE COPY of Report Card",
+    "CERTIFIED TRUE COPY of Good Moral Character ",
+    "ORIGINAL certificate of PDAO or Municipal Agriculture Office or MSWDO ",
+    "Original or Certified true copy of enrollment or registration form",
+    "Original or CERTIFIED TRUE COPY of certification from MSWDO",
+  ];
 
-    const formData = new FormData();
+  const missingFiles = requiredFiles.filter((fileType) => !files[fileType]);
 
-    // Add last name to the form data
-    formData.append("last_name", lastName);
-    formData.append("applicant_id", applicant_id);
-    // Add files to the form data
-    for (const [fileType, file] of Object.entries(files)) {
-      formData.append(fileType, file); // Add each file with its type as the key
-    }
+  if (missingFiles.length > 0) {
+    Swal.fire(
+      "Error",
+      `The following files are missing: ${missingFiles.join(", ")}. Please upload them before submitting.`,
+      "error"
+    );
+    return;
+  }
 
+  const lastName = userData.surname;
+  const applicant_id = userData.application_id;
 
-    // Send files to Flask
-    axios
-      .post("http://localhost:5000/submit-all", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((response) => {
-        Swal.fire("Success", "All files uploaded successfully.", "success");
-      })
-      .catch((error) => {
-        Swal.fire("Error", "Failed to upload files.", "error");
-      });
-  };
+  const formData = new FormData();
+
+  formData.append("last_name", lastName);
+  formData.append("applicant_id", applicant_id);
+
+  for (const [fileType, file] of Object.entries(files)) {
+    formData.append(fileType, file);
+  }
+
+  // Send files to Flask
+  axios
+    .post("http://localhost:5000/submit-all", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((response) => {
+      Swal.fire("Success", "All files uploaded successfully.", "success");
+    })
+    .catch((error) => {
+      Swal.fire("Error", "Failed to upload files.", "error");
+    });
+};
 
   const handleUpload = (id) => {
     // ini yung upload button sa pop up
@@ -125,12 +154,12 @@ const FinalReqPage = () => {
         </button>
       </header>
       <div className="application-details">
-        <h3>APPLICATION ID: 0N2WDWV037FBD</h3>
+        <h3>APPLICATION ID: {userData.application_id}</h3>
         <p>
           Status: <strong>FOR VALIDATION</strong>
         </p>
-        <p>Name of Applicant: Juan Dela Cruz</p>
-        <p>Birthdate: 06/23/2000</p>
+        <p>Name of Applicant: {userData.first_name} {userData.surname}</p>
+        <p>Birthdate: {formattedBirthdate}</p>
       </div>
 
       <div className="requirements">
