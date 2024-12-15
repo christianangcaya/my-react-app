@@ -325,9 +325,9 @@ def get_data():
 # SEAN PUTANGINAMO, OKAY NA. ITO ALTERNATIVE PATH LANG TO
 # KASI DI KA PALA GUMAWA NG PATH PERO CINACALL MO NA AGAD
 # NAG SASAVE NA PICS SA FOLDER PATI DATA SA DB
-def save_file_to_folder(file, last_name, file_type):
+def save_file_to_folder(file, last_name, id, file_type):
     # Logic to save the file and return the file path
-    filename = f"{last_name}_{file_type}.png"  # Example, customize as needed
+    filename = f"{file_type}.png"  # Example, customize as needed
     first_letter = last_name[0].upper() if last_name else "Other"
 
     if 'A' <= first_letter <= 'C':
@@ -352,11 +352,12 @@ def save_file_to_folder(file, last_name, file_type):
     current_year = str(datetime.now().year)
 
     file_path = os.path.join(
-        f"C:/LGU Daet Scholarship/{current_year}/{folder_range}/{last_name}/Initial Requirements/{filename}"
+        f"C:/LGU Daet Scholarship/{current_year}/{folder_range}/{last_name + id}/Initial Requirements/"
     )
 
     os.makedirs(file_path, exist_ok=True)
     
+    file_path = os.path.join(file_path, filename)
     file.save(file_path)
     return file_path
 
@@ -425,13 +426,13 @@ def submit_initial_requirements():
 
         # Save each file and get the file paths
         if profile_image:
-            photo_path = save_file_to_folder(profile_image, last_name, "ProfileImage")
+            photo_path = save_file_to_folder(profile_image, last_name, applicant_id, "ProfileImage")
             print(f"Profile Image Path: {photo_path}")
         if itr:
-            itr_path = save_file_to_folder(itr, last_name, "ITR")
+            itr_path = save_file_to_folder(itr, last_name, applicant_id, "ITR")
             print(f"ITR Path: {itr_path}")
         if e_signature:
-            e_signature_path = save_file_to_folder(e_signature, last_name, "ESignature")
+            e_signature_path = save_file_to_folder(e_signature, last_name, applicant_id, "ESignature")
             print(f"eSignature Path: {e_signature_path}")
 
 
