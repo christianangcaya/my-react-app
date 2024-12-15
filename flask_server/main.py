@@ -319,43 +319,51 @@ def get_data():
         # Log the exception and return a server error
         print(f"Error fetching data: {e}")
         return jsonify({"error": "Failed to fetch data"}), 500
+    
 
+
+# SEAN PUTANGINAMO, OKAY NA. ITO ALTERNATIVE PATH LANG TO
+# KASI DI KA PALA GUMAWA NG PATH PERO CINACALL MO NA AGAD
+# NAG SASAVE NA PICS SA FOLDER PATI DATA SA DB
+def save_file_to_folder(file, last_name, file_type):
+    # Logic to save the file and return the file path
+    filename = f"{last_name}_{file_type}.png"  # Example, customize as needed
+    file_path = f"C:/LGU Daet Scholarship\\{filename}"
+    file.save(file_path)  # Save the file to disk
+    return file_path
 
 @app.route('/submit_initial_requirements', methods=['POST'])
 def submit_initial_requirements():
     try:
-        # Get JSON data from the request
-        data = request.get_json()
-
         #Basic Info
-        applicant_id = data.get("applicant_id")
-        name = data.get("name", {})
+        applicant_id = request.form.get("applicant_id")
+        name = request.form.get("name", {})
         last_name = name.get("lastName", "")
         first_name = name.get("firstName", "")
         middle_name = name.get("middleName", "") or None
         suffix = name.get("suffix", "") or None
-        age = data.get("age")
-        religion = data.get("religion")
-        sex = data.get("sexValue")
-        civil_status = data.get("civilStatus")
-        birthdate = data.get("birthdate")
-        place_of_birth = data.get("place_of_birth")
-        permanent_address = data.get("permanent_address", {})
+        age = request.form.get("age")
+        religion = request.form.get("religion")
+        sex = request.form.get("sex")
+        civil_status = request.form.get("civilStatus")
+        birthdate = request.form.get("birthdate")
+        place_of_birth = request.form.get("place_of_birth")
+        permanent_address = request.form.get("permanent_address", {})
         barangay = permanent_address.get("barangay", "")
         purok = permanent_address.get("purok", "")
         street = permanent_address.get("street", "") or None
         municipality = permanent_address.get("municipality", "")
-        contact_number = data.get("contact_number")
-        email_address = data.get("email_address")
+        contact_number = request.form.get("contact_number")
+        email_address = request.form.get("email_address")
 
         #Educ Info
-        grant_type = data.get("grant_type")
-        educ_attainment = data.get("educ_attainment")
-        highest_grade_year = data.get("highest_grade_year")
-        gwa = data.get("gwa")
-        school_name = data.get("school_name")
-        school_type = data.get("school_type")
-        awards = data.get("awards", [])
+        grant_type = request.form.get("grant_type")
+        educ_attainment = request.form.get("educ_attainment")
+        highest_grade_year = request.form.get("highest_grade_year")
+        gwa = request.form.get("gwa")
+        school_name = request.form.get("school_name")
+        school_type = request.form.get("school_type")
+        awards = request.form.get("awards", [])
 
         awards_string = ', '.join([f"{award['description']} - {award['school']} - {award['date']}" for award in awards])
 
@@ -363,27 +371,27 @@ def submit_initial_requirements():
         cursor = conn.cursor()
 
         #Family Info
-        father_status = data.get("father_status")
-        father_name = data.get("father_name")
-        father_address = data.get("father_address")
-        father_occupation = data.get("father_occupation")
-        mother_status = data.get("mother_status")
-        mother_name = data.get("mother_name")
-        mother_address = data.get("mother_address")
-        mother_occupation = data.get("mother_occupation")
-        gross_income = data.get("gross_income")
-        number_of_siblings = data.get("number_of_siblings")
-        number_of_brothers = data.get("number_of_brothers")
-        number_of_sisters = data.get("number_of_sisters")
-        partner_name = data.get("partner_name") or None
-        number_of_children = data.get("number_of_children") or None
-        partner_occupation = data.get("partner_occupation") or None
-        partner_course = data.get("partner_course") or None
+        father_status = request.form.get("father_status")
+        father_name = request.form.get("father_name")
+        father_address = request.form.get("father_address")
+        father_occupation = request.form.get("father_occupation")
+        mother_status = request.form.get("mother_status")
+        mother_name = request.form.get("mother_name")
+        mother_address = request.form.get("mother_address")
+        mother_occupation = request.form.get("mother_occupation")
+        gross_income = request.form.get("gross_income")
+        number_of_siblings = request.form.get("number_of_siblings")
+        number_of_brothers = request.form.get("number_of_brothers")
+        number_of_sisters = request.form.get("number_of_sisters")
+        partner_name = request.form.get("partner_name") or None
+        number_of_children = request.form.get("number_of_children") or None
+        partner_occupation = request.form.get("partner_occupation") or None
+        partner_course = request.form.get("partner_course") or None
 
         #File Initial
         profile_image = request.files.get('profile_image')
         itr = request.files.get('itr')
-        e_signature = request.files.get('e_signature')
+        e_signature = request.files.get('eSignature')
 
         photo_path = None
         itr_path = None
