@@ -118,10 +118,10 @@ def initialize_database():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS final_requirements (
                 final_requirements_id INT AUTO_INCREMENT PRIMARY KEY,
-                applicant_id VARCHAR(10),
+                application_id VARCHAR(10),
                 last_name VARCHAR(100),
                 final_req_folder_path VARCHAR(255),
-                FOREIGN KEY (applicant_id) REFERENCES af_basic_info(applicant_id)
+                FOREIGN KEY (application_id) REFERENCES applicants(application_id)
             )
         """)
 
@@ -588,7 +588,7 @@ def submit_all():
             return jsonify({"message": "No files or last name provided"}), 400
 
         last_name = request.form.get("last_name")
-        applicant_id = request.form.get("applicant_id")
+        application_id = request.form.get("applicant_id")
         saved_files = []
 
         current_year = str(datetime.now().year)
@@ -626,10 +626,10 @@ def submit_all():
         cursor = conn.cursor()
 
         insert_query = """
-            INSERT INTO final_requirements (applicant_id, last_name, final_req_folder_path) 
+            INSERT INTO final_requirements (application_id, last_name, final_req_folder_path) 
             VALUES (%s, %s, %s)
         """
-        cursor.execute(insert_query, (applicant_id, last_name, final_req_folder_path))
+        cursor.execute(insert_query, (application_id, last_name, final_req_folder_path))
 
         conn.commit()
         cursor.close()
@@ -642,6 +642,59 @@ def submit_all():
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
 
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    applicant_id = data.get('applicantId')
+    birthdate = data.get('birthdate')
+
+    try:
+        # Connect to the database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # Check if the credentials match and the status is 'scholar'
+        query = """
+        SELECT application_id, surname, first_name, birthdate, status
+        FROM applicants
+        WHERE email_address = %s AND application_id = %s AND birthdate = %s
+        """
+        cursor.execute(query, (email, applicant_id, birthdate))
+        user_data = cursor.fetchone()
+
+        if user_data:
+            application_id, surname, first_name, birthdate, status = user_data
+
+            if status == 'scholar':
+                return jsonify({
+                    "success": True,
+                    "message": "Login successful",
+                    "data": {
+                        "application_id": application_id,
+                        "surname": surname,
+                        "first_name": first_name,
+                        "birthdate": birthdate,
+                        "status": status
+                    }
+                })
+            else:
+                return jsonify({
+                    "success": False,
+                    "message": "Not a scholar. Login failed."
+                })
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Invalid credentials or account not found."
+            })
+
+    except mysql.connector.Error as err:
+        return jsonify({"success": False, "message": f"Database error: {err}"})
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
