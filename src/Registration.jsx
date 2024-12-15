@@ -1,12 +1,28 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./Registration.css";
 import DefaultImage from "./assets/pfp_placeholder.png";
 import PreviewIcon from "./assets/itr_preview.png";
 
 // Reusable input component
-const InputField = ({ id, label, name, type = "text", value, onChange, disabled }) => (
+const InputField = ({
+  id,
+  label,
+  name,
+  type = "text",
+  value,
+  onChange,
+  disabled,
+}) => (
   <div className="name-group">
-    <input type={type} id={id} name={name} value={value} onChange={onChange} disabled={disabled}/>
+    <input
+      type={type}
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+    />
     <label htmlFor={id}>{label}</label>
   </div>
 );
@@ -49,11 +65,10 @@ const gradeYearOptions = {
   als: ["N/A"],
 };
 
-
 const Registration = () => {
-
+  const location = useLocation();
+  const applicationId = location.state?.applicationId;
   const [formData, setFormData] = useState({
-
     avatarURL: DefaultImage,
     grant_type: "",
     sex: "",
@@ -100,31 +115,52 @@ const Registration = () => {
 
   useEffect(() => {
     // Fetch data from Flask backend
-    fetch("http://127.0.0.1:5000/api/data") // Replace with the actual Flask endpoint
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/data"); // Replace with the actual Flask endpoint
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        // Transform and update formData with fetched data
-        setFormData((prevData) => ({
-          ...prevData,
-          name: {
-            lastName: data.surname,
-            firstName: data.first_name,
-            middleName: data.middle_name,
-            suffix: data.suffix_name,
-          },
-          birthdate: data.birthdate,
-          email_address: data.email_address,
-          applicant_id: data.application_id,
+        const data = await response.json();
 
-        }));
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+        // Loop through the list to find the matching application_id
+        const matchingData = data.find(
+          (item) =>
+            String(item.application_id).trim() === String(applicationId).trim()
+        );
+
+        if (matchingData) {
+          const formattedBirthdate = new Date(matchingData.birthdate)
+            .toISOString()
+            .split("T")[0];
+          setFormData((prevData) => ({
+            ...prevData,
+            name: {
+              lastName: matchingData.surname || "",
+              firstName: matchingData.first_name || "",
+              middleName: matchingData.middle_name || "",
+              suffix: matchingData.suffix_name || "",
+            },
+            birthdate: formattedBirthdate || "",
+            email_address: matchingData.email_address || "",
+            applicant_id: matchingData.application_id || "",
+          }));
+        } else {
+          console.warn(
+            `No matching data found for application_id: ${applicationId}`
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (applicationId) {
+      fetchData();
+    } else {
+      console.error("applicationId is not defined.");
+    }
+  }, [applicationId]);
 
   const [awards, setAwards] = useState([
     { description: "", school: "", date: "" },
@@ -406,7 +442,6 @@ const Registration = () => {
                 value={formData.applicant_id}
                 onChange={handleChange}
                 disabled={true}
-                
               />
               <InputField
                 id="lname"

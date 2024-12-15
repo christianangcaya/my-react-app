@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 db_config = {
     'host': 'localhost',       # XAMPP MySQL server
@@ -303,16 +303,22 @@ def register_user():
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
-    data = {
-        "application_id": "1313878471",
-        "surname": "Abdula",
-        "first_name": "Abnero",
-        "middle_name": "Saturnino",
-        "suffix_name": "Jr.",
-        "birthdate": "2000-01-01",
-        "email_address": "johnnySins6969@example.com"
-    }
-    return jsonify(data)
+    try:
+        # Connect to the database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+        # Fetch all applicant data
+        cursor.execute("SELECT * FROM applicants")
+        applicant_data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        # Return the data as JSON
+        print(applicant_data)
+        return jsonify(applicant_data), 200
+    except Exception as e:
+        # Log the exception and return a server error
+        print(f"Error fetching data: {e}")
+        return jsonify({"error": "Failed to fetch data"}), 500
 
 
 @app.route('/submit_initial_requirements', methods=['POST'])

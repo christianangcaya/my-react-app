@@ -17,18 +17,20 @@ const RegisterPopup = ({ onClose }) => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-  
+
     if (["surname", "firstName", "middleName"].includes(id)) {
       const namePattern = /^[A-Za-z\sñÑ]*$/;
       if (!namePattern.test(value)) {
         return;
       }
-      
+
       const formattedValue = value
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-  
+        .split(" ")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(" ");
+
       setFormData((prevData) => ({
         ...prevData,
         [id]: formattedValue,
@@ -40,7 +42,7 @@ const RegisterPopup = ({ onClose }) => {
       }));
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -63,9 +65,13 @@ const RegisterPopup = ({ onClose }) => {
       const data = await response.json();
 
       if (response.ok) {
-        alert(`Registration successful. Application ID: ${data.application_id}`);
-        onClose();  // Close the popup after successful registration
-        navigate("/registration"); //pag navigate
+        alert(
+          `Registration successful. Application ID: ${data.application_id}`
+        );
+        onClose(); // Close the popup after successful registration
+        navigate("/registration", {
+          state: { applicationId: data.application_id },
+        });
       } else {
         setError(data.error || "An error occurred. Please try again.");
       }
