@@ -692,7 +692,7 @@ def submit_all():
         else:
             folder_range = "Other"
         
-        final_req_folder_path = f"C:/LGU Daet Scholarship\\{current_year}\\{folder_range}\\{last_name} {application_id}\\Final Requirements\\"
+        final_req_folder_path = f"C:/LGU Daet Scholarship\\{current_year}\\{folder_range}\\{last_name}{application_id}\\Final Requirements\\"
         os.makedirs(final_req_folder_path, exist_ok=True)
 
         file_paths = {}
