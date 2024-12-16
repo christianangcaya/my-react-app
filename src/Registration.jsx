@@ -67,6 +67,34 @@ const gradeYearOptions = {
   als: ["N/A"],
 };
 
+const barangays = [
+  "Alawihao",
+  "Awitan",
+  "Bagasbas",
+  "Barangay I (Poblacion)",
+  "Barangay II (Poblacion)",
+  "Barangay III (Poblacion)",
+  "Barangay IV (Poblacion)",
+  "Barangay V (Poblacion)",
+  "Barangay VI (Poblacion)",
+  "Bibirao",
+  "Borabod",
+  "Calasgasan",
+  "Camambugan",
+  "Cobangbang",
+  "Dogongan",
+  "Gahonon",
+  "Lag-on",
+  "Magang",
+  "Mancruz",
+  "Pamorangon",
+  "San Isidro",
+  "San Roque",
+  "Santa Cruz",
+  "Santo Domingo",
+  "Talisay",
+];
+
 const Registration = () => {
   const location = useLocation();
   const applicationId = location.state?.applicationId;
@@ -85,7 +113,7 @@ const Registration = () => {
       barangay: "",
       purok: "",
       street: "",
-      municipality: "",
+      municipality: "Daet",
     },
     contact_number: "",
     email_address: "",
@@ -554,6 +582,14 @@ const Registration = () => {
                 checked={formData.sex === "Male"}
                 onChange={handleChange}
               />
+              <RadioOption
+                id="other"
+                name="sex"
+                value="Other"
+                label="Other"
+                checked={formData.sex === "Other"}
+                onChange={handleChange}
+              />
             </div>
             <div className="info1-group">
               <label htmlFor="status">Civil Status:</label>
@@ -604,13 +640,24 @@ const Registration = () => {
           {/* Permanent Address Information */}
           <div className="personal-info">
             <p>Permanent Address:</p>
-            <InputField
-              id="barangay"
-              label="Barangay"
-              name="permanent_address.barangay"
-              value={formData.permanent_address.barangay}
-              onChange={handleChange}
-            />
+            <div className="info1-group">
+              <label htmlFor="barangay">Select a Barangay:</label>
+              <select
+                id="barangay"
+                name="permanent_address.barangay"
+                value={formData.permanent_address.barangay}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  -- Choose an option --
+                </option>
+                {barangays.map((barangay, index) => (
+                  <option key={index} value={barangay}>
+                    {barangay}
+                  </option>
+                ))}
+              </select>
+            </div>
             <InputField
               id="purok"
               label="Purok"
@@ -631,6 +678,7 @@ const Registration = () => {
               name="permanent_address.municipality"
               value={formData.permanent_address.municipality}
               onChange={handleChange}
+              disabled={true}
             />
           </div>
 
