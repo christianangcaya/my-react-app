@@ -105,8 +105,8 @@ input[type="number"],
 input[type="date"],
 input[type="email"],
 select {
-  width: 80%;
-  padding: 5px;
+  width: 100%;
+  padding: 10px;
   margin-top: 0;
   border: 1px solid #ccc;
   border-radius: 4px;

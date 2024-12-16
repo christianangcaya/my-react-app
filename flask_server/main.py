@@ -697,7 +697,8 @@ def submit_all():
 
         file_paths = {}
         for file_type, file in request.files.items():
-            file_path = os.path.join(final_req_folder_path, f"{file_type}_{file.filename}")
+            file_extension = os.path.splitext(file.filename)[1]
+            file_path = os.path.join(final_req_folder_path, f"{file_type}{file_extension}")
             file.save(file_path)
             saved_files.append(file_path)
             file_paths[file_type] = file_path
